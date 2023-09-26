@@ -21,9 +21,11 @@
                     Daftar Pekerjaan
                 </div>
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#tambahModal">
-                        <i class="fas fa-plus"></i> Tambah
-                    </button>
+                    <?php if (empty($cekbayar)) { ?>
+                        <button type="button" class="btn btn-primary btn-sm mb-2" data-bs-toggle="modal" data-bs-target="#tambahModal">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                    <?php } ?>
                     <table class="table">
                         <thead>
                             <tr>
@@ -46,12 +48,14 @@
                                     <td><?= number_to_currency($value->harga, 'IDR', 'id_ID') ?></td>
                                     <td><?= number_to_currency($value->biaya, 'IDR', 'id_ID') ?></td>
                                     <td>
-                                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id; ?>">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $value->id; ?>">
-                                            <i class="fas fa-trash-alt"></i> Hapus
-                                        </button>
+                                        <?php if (empty($cekbayar)) { ?>
+                                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id; ?>">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $value->id; ?>">
+                                                <i class="fas fa-trash-alt"></i> Hapus
+                                            </button>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -60,9 +64,11 @@
                     <a class="btn btn-warning btn-block m-2" href="<?= base_url('hbk/uraian/cetak/' . $hbk->id_hbk) ?>">
                         <i class="fas fa-print"></i> Cetak HBK
                     </a>
-                    <a class="btn btn-dark btn-block m-2" href="<?= base_url('hbk/uraian/batal/' . $hbk->id_hbk) ?>">
-                        <i class="fas fa-trash"></i> Batalkan
-                    </a>
+                    <?php if (empty($cekbayar)) { ?>
+                        <a class="btn btn-dark btn-block m-2" href="<?= base_url('hbk/uraian/batal/' . $hbk->id_hbk) ?>">
+                            <i class="fas fa-trash"></i> Batalkan
+                        </a>
+                    <?php } ?>
                 </div>
             </div>
             <div class="row">
@@ -147,9 +153,15 @@
                                 </li>
                             </ol>
                         </div>
-                        <button type="button" class="btn btn-info btn-block m-2" data-bs-toggle="modal" data-bs-target="#updateModal">
-                            <i class="fas fa-edit"></i> Refisi Total Pembulatan
-                        </button>
+                        <?php if (empty($cekbayar)) { ?>
+                            <button type="button" class="btn btn-info btn-block m-2" data-bs-toggle="modal" data-bs-target="#updateModal">
+                                <i class="fas fa-edit"></i> Refisi Total Pembulatan
+                            </button>
+                        <?php } else { ?>
+                            <button type="button" class="btn btn-danger btn-block m-2">
+                                <i class="fas fa-users"></i> Sudah Pembayaran HBK
+                            </button>
+                        <?php } ?>
                     </div>
                 </div>
             </div>

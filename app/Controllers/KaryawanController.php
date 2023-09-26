@@ -30,6 +30,7 @@ class KaryawanController extends BaseController
                 'gapok' => esc($this->request->getPost('gapok')),
                 'um' => esc($this->request->getPost('um')),
                 'op' => esc($this->request->getPost('op')),
+                'bonus' => esc($this->request->getPost('bonus')),
                 'rekening' => esc($this->request->getPost('rekening')),
                 'bank' => esc($this->request->getPost('bank')),
                 'posisi' => esc($this->request->getPost('posisi')),
@@ -59,6 +60,7 @@ class KaryawanController extends BaseController
                 'gapok' => esc($this->request->getPost('gapok')),
                 'um' => esc($this->request->getPost('um')),
                 'op' => esc($this->request->getPost('op')),
+                'bonus' => esc($this->request->getPost('bonus')),
             ];
             $this->KaryawanModel->update($id_karyawan, $data);
 

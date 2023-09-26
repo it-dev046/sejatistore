@@ -19,6 +19,11 @@ class BayarhbkModel extends Model
     protected $createdField  = 'tanggal_input';
     protected $updatedField  = 'tanggal_ubah';
 
+    public function cekbayar($id_hbk)
+    {
+        return $this->where('id_hbk', $id_hbk)->countAllResults() > 0;
+    }
+
     public function jumlahbayar($id)
     {
         $query = $this->db->table('bayarhbk')

@@ -57,6 +57,7 @@
                                                 Gapok : <?= number_to_currency($value->gapok, 'IDR', 'id_ID',) ?><br>
                                                 OP : <?= number_to_currency($value->op, 'IDR', 'id_ID',) ?><br>
                                                 UM : <?= number_to_currency($value->um, 'IDR', 'id_ID',) ?><br>
+                                                Bonus : <?= number_to_currency($value->bonus, 'IDR', 'id_ID',) ?><br>
                                             </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
                                             <td class="text-canter">
@@ -113,6 +114,10 @@
                         <div class="mb-3">
                             <label for="op">Operasional</label>
                             <input type="number" name="op" id="op" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="bonus">Bonus</label>
+                            <input type="number" name="bonus" id="bonus" class="form-control" required>
                         </div>
                         <div class="mb-3">
                             <label for="rekening">Rekening</label>
@@ -180,6 +185,10 @@
                             <div class="mb-3">
                                 <label for="op">Operasional</label>
                                 <input type="text" name="op" id="op" class="form-control" value="<?= $karyawan->op; ?>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bonus">Bonus</label>
+                                <input type="text" name="bonus" id="bonus" class="form-control" value="<?= $karyawan->bonus; ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="rekening">Rekening</label>

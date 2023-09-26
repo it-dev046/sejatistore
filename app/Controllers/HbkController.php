@@ -270,12 +270,14 @@ class HbkController extends BaseController
     public function uraian($id_hbk)
     {
         $hbk = $this->HbkModel->where('id_hbk', $id_hbk)->first();
+
         $data = [
             'title' => 'Halaman Harga Borongan Kerja',
             'invoice' => $this->PasangModel->where('id_pasang', $hbk->id_pasang)
                 ->join('survei', 'survei.id_survei = pemasangan.id_survei', 'left')
                 ->select('pemasangan.*, survei.pengukur, survei.tukang, survei.drafter')
                 ->first(),
+            'cekbayar' => $this->BayarhbkModel->cekbayar($id_hbk),
             'hbk' => $this->HbkModel->where('id_hbk', $id_hbk)->first(),
             'ukuran' => $this->UkuranModel->orderBy('id_ukuran', 'DESC')->findAll(),
             'uraian_kerja' => $this->DetailpasangModel

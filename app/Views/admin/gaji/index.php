@@ -47,18 +47,6 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-2">
-                                        <label for="gapok">
-                                            <h6>Gaji Pokok</h6>
-                                        </label>
-                                        <input type="number" name="gapok" id="gapok" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="bonus">
-                                            <h6>Bonus</h6>
-                                        </label>
-                                        <input type="number" name="bonus" id="bonus" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
                                         <label for="potongan">
                                             <h6>Potongan</h6>
                                         </label>
@@ -83,9 +71,7 @@
                                         <th>No</th>
                                         <th>Tanggal</th>
                                         <th>Nama</th>
-                                        <th>Gapok</th>
-                                        <th>Bonus</th>
-                                        <th>Potongan</th>
+                                        <th>Nominal</th>
                                         <th>Total</th>
                                         <th>Rekening</th>
                                         <th>Keterangan</th>
@@ -100,11 +86,36 @@
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
                                             <td> <?= $value->nama; ?> </td>
-                                            <td> <?= number_to_currency($value->gapok, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($value->bonus, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($value->potongan, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($value->total, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= $value->rek; ?> (<?= $value->bank; ?>) </td>
+                                            <td>
+                                                Gapok :
+                                                <?php if (!empty($value->gapok)) { ?>
+                                                    <?= number_to_currency($value->gapok, 'IDR', 'id_ID',) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                                <br>
+                                                Bonus :
+                                                <?php if (!empty($value->bonus)) { ?>
+                                                    <?= number_to_currency($value->bonus, 'IDR', 'id_ID',) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                                <br>
+                                                Potongan :
+                                                <?php if (!empty($value->potongan)) { ?>
+                                                    <?= number_to_currency($value->potongan, 'IDR', 'id_ID',) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($value->total)) { ?>
+                                                    <?= number_to_currency($value->total, 'IDR', 'id_ID',) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
+                                            <td> <?= $value->rekening; ?> (<?= $value->bank; ?>) </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
                                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id_gaji; ?>">
@@ -137,36 +148,13 @@
                         <form action=" <?= base_url('gaji/ubah/' . $gaji->id_gaji) ?>" method="post">
                             <?= csrf_field() ?>
                             <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
+                            <input type="number" name="id_karyawan" id="id_karyawan" class="form-control" value="<?= $gaji->id_karyawan; ?>" hidden>
                             <input type="hidden" name="_method" value="PUT">
-                            <div class="mb-3">
-                                <label for="gapok">
-                                    <h6>Gaji Pokok</h6>
-                                </label>
-                                <input type="number" name="gapok" id="gapok" class="form-control" value="<?= $gaji->gapok; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bonus">
-                                    <h6>Bonus</h6>
-                                </label>
-                                <input type="number" name="bonus" id="bonus" class="form-control" value="<?= $gaji->bonus; ?>" required>
-                            </div>
                             <div class="mb-3">
                                 <label for="potongan">
                                     <h6>Potongan</h6>
                                 </label>
                                 <input type="number" name="potongan" id="potongan" class="form-control" value="<?= $gaji->potongan; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rek">
-                                    <h6>Rekening</h6>
-                                </label>
-                                <input type="text" name="rek" id="rek" class="form-control" value="<?= $gaji->rek; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bank">
-                                    <h6>Bank</h6>
-                                </label>
-                                <input type="text" name="bank" id="bank" class="form-control" value="<?= $gaji->bank; ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="keterangan">
@@ -215,15 +203,11 @@
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Rekening</td>
-                                    <td> : <strong><?= $gaji->rek ?></strong></td>
+                                    <td> : <strong><?= $gaji->rekening ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Bank</td>
                                     <td> : <strong><?= $gaji->bank ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Total Penggajian Karyawan</td>
-                                    <td> : <strong><?= number_to_currency($value->total, 'IDR', 'id_ID',) ?></strong></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -9,5 +9,5 @@ class GajiModel extends Model
     protected $table            = 'gaji';
     protected $primaryKey       = 'id_gaji';
     protected $returnType       = 'object';
-    protected $allowedFields    = ['tanggal', 'nama', 'gapok', 'bonus', 'potongan', 'total', 'rek', 'bank', 'keterangan'];
+    protected $allowedFields    = ['tanggal', 'id_karyawan', 'potongan', 'total', 'keterangan'];
 }

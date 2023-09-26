@@ -9,7 +9,10 @@ class GajiController extends BaseController
         $data = [
             'title' => 'Halaman Gaji Karyawan',
             'userId' => $this->session->get('id'),
-            'daftar_gaji' => $this->GajiModel->orderBy('id_gaji', 'DESC')->findAll(),
+            'daftar_gaji' => $this->GajiModel
+                ->join('karyawan', 'karyawan.id_karyawan = gaji.id_karyawan', 'left')
+                ->select('gaji.*, karyawan.gapok, karyawan.bonus, karyawan.rekening, karyawan.bank, karyawan.nama')
+                ->orderBy('id_gaji', 'DESC')->findAll(),
             'daftar_karyawan' => $this->KaryawanModel->orderBy('id_karyawan', 'DESC')->findAll(),
         ];
 
@@ -23,22 +26,16 @@ class GajiController extends BaseController
 
         if ($userId == $cekid) {
             $id_karyawan = $this->request->getPost('id_karyawan');
-            $gapok = $this->request->getPost('gapok');
-            $bonus = $this->request->getPost('bonus');
             $potongan = $this->request->getPost('potongan');
-
-            $total = $gapok + $bonus - $potongan;
             $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
+
+            $total = $karyawan->gapok + $karyawan->bonus - $potongan;
 
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
-                'nama' => $karyawan->nama,
-                'rek' => $karyawan->rekening,
-                'bank' => $karyawan->bank,
-                'bonus' => $bonus,
-                'gapok' => $gapok,
+                'id_karyawan' => $id_karyawan,
                 'potongan' => $potongan,
                 'total' => $total,
             ];
@@ -56,18 +53,14 @@ class GajiController extends BaseController
         $userId = $this->request->getPost('userId');
 
         if ($userId == $cekid) {
-            $gapok = $this->request->getPost('gapok');
-            $bonus = $this->request->getPost('bonus');
+            $id_karyawan = $this->request->getPost('id_karyawan');
             $potongan = $this->request->getPost('potongan');
+            $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
 
-            $total = $gapok + $bonus - $potongan;
+            $total = $karyawan->gapok + $karyawan->bonus - $potongan;
             //simpan data database
             $data = [
                 'keterangan' => esc($this->request->getPost('keterangan')),
-                'rek' => esc($this->request->getPost('rek')),
-                'bank' => esc($this->request->getPost('bank')),
-                'bonus' => $bonus,
-                'gapok' => $gapok,
                 'potongan' => $potongan,
                 'total' => $total,
             ];

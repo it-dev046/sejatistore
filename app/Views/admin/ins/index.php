@@ -47,18 +47,6 @@
                                         </select>
                                     </div>
                                     <div class="mb-3 col-2">
-                                        <label for="op">
-                                            <h6>Operasional</h6>
-                                        </label>
-                                        <input type="number" name="op" id="op" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="um">
-                                            <h6>Uang Makan</h6>
-                                        </label>
-                                        <input type="number" name="um" id="um" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
                                         <label for="potongan">
                                             <h6>Potongan</h6>
                                         </label>
@@ -83,9 +71,7 @@
                                         <th>No</th>
                                         <th>Tanggal</th>
                                         <th>Nama</th>
-                                        <th>OP</th>
-                                        <th>UM</th>
-                                        <th>Potongan</th>
+                                        <th>Nominal</th>
                                         <th>Total</th>
                                         <th>Rekening</th>
                                         <th>Keterangan</th>
@@ -100,11 +86,14 @@
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
                                             <td> <?= $value->nama; ?> </td>
-                                            <td> <?= number_to_currency($value->op, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($value->um, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($value->potongan, 'IDR', 'id_ID',) ?></td>
+                                            <td>
+                                                OP : <?= number_to_currency($value->op, 'IDR', 'id_ID',) ?> <br>
+                                                UM : <?= number_to_currency($value->um, 'IDR', 'id_ID',) ?> <br>
+                                                Potongan + Absensi : <br>
+                                                ( <?= number_to_currency($value->potongan, 'IDR', 'id_ID',) ?> )
+                                            </td>
                                             <td> <?= number_to_currency($value->total, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= $value->rek; ?> (<?= $value->bank; ?>) </td>
+                                            <td> <?= $value->rekening; ?> <br> (<?= $value->bank; ?>) </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
                                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id_ins; ?>">
@@ -137,36 +126,14 @@
                         <form action=" <?= base_url('ins/ubah/' . $ins->id_ins) ?>" method="post">
                             <?= csrf_field() ?>
                             <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
+                            <input type="number" name="id_karyawan" id="id_karyawan" class="form-control" value="<?= $ins->id_karyawan; ?>" hidden>
+                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $ins->tanggal; ?>" hidden>
                             <input type="hidden" name="_method" value="PUT">
-                            <div class="mb-3">
-                                <label for="op">
-                                    <h6>Operasional</h6>
-                                </label>
-                                <input type="number" name="op" id="op" class="form-control" value="<?= $ins->op; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="um">
-                                    <h6>Uang Makan</h6>
-                                </label>
-                                <input type="number" name="um" id="um" class="form-control" value="<?= $ins->um; ?>" required>
-                            </div>
                             <div class="mb-3">
                                 <label for="potongan">
                                     <h6>Potongan</h6>
                                 </label>
                                 <input type="number" name="potongan" id="potongan" class="form-control" value="<?= $ins->potongan; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rek">
-                                    <h6>Rekening</h6>
-                                </label>
-                                <input type="text" name="rek" id="rek" class="form-control" value="<?= $ins->rek; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bank">
-                                    <h6>Bank</h6>
-                                </label>
-                                <input type="text" name="bank" id="bank" class="form-control" value="<?= $ins->bank; ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="keterangan">
@@ -215,7 +182,7 @@
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Rekening</td>
-                                    <td> : <strong><?= $ins->rek ?></strong></td>
+                                    <td> : <strong><?= $ins->rekening ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Bank</td>
