@@ -6,7 +6,7 @@
             <h1 class="mt-4"> <?= $title; ?> </h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href=" <?= base_url('dashboard-admin') ?> ">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href=" <?= base_url('hutang') ?> ">Daftar Data Hutang Perusahaan</a></li>
+                <li class="breadcrumb-item"><a href=" <?= base_url('hutang') ?> ">Daftar Hutang Perusahaan</a></li>
                 <li class="breadcrumb-item active"> <?= $title; ?> </li>
             </ol>
             <div class="card mb-4">
@@ -33,18 +33,11 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-4 mt-1">
-                                        <label for="id">
+                                    <div class="mb-3 col-4">
+                                        <label for="sumber">
                                             <h6>Sumber</h6>
                                         </label>
-                                        <select name="sumber" id="sumber" class="form-control">
-                                            <option value="" hidden>--Pilih--</option>
-                                            <!-- panggil data Sumber -->
-                                            <?php foreach ($daftar_sumber as $key => $value) { ?>
-                                                <option value="<?= $value['keterangan'] ?> ( <?= $value['kode'] ?> )"><?= $value['keterangan'] ?> (
-                                                    <?= number_to_currency($value['saldo'], 'IDR', 'id_ID',) ?>)</option>
-                                            <?php } ?>
-                                        </select>
+                                        <input type="text" name="sumber" id="sumber" class="form-control" required>
                                     </div>
                                     <div class="mb-3 col-4">
                                         <label for="tujuan">

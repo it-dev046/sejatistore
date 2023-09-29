@@ -9,5 +9,5 @@ class PiutangModel extends Model
     protected $table            = 'piutang';
     protected $primaryKey       = 'id_piutang';
     protected $returnType       = 'object';
-    protected $allowedFields    = ['tanggal', 'nama', 'alamat', 'saldo', 'keterangan'];
+    protected $allowedFields    = ['tanggal', 'id_rekening', 'alamat', 'saldo', 'keterangan'];
 }

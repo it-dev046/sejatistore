@@ -28,4 +28,24 @@ class AbsenModel extends Model
             return 0;
         }
     }
+
+    public function bulanan($nama, $bulan, $tahun)
+    {
+        $tglawal = date("{$tahun}-{$bulan}-01");
+        $tglakhir = date("{$tahun}-{$bulan}-t");
+        $query = $this->db->table('absen')
+            ->where('DATE(tanggal) >=', $tglawal)
+            ->where('DATE(tanggal) <=', $tglakhir)
+            ->where('nama', $nama)
+            ->selectSum('potongan')
+            ->get();
+
+        $result = $query->getRow();
+
+        if ($result) {
+            return $result->potongan;
+        } else {
+            return 0;
+        }
+    }
 }

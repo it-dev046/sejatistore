@@ -68,6 +68,7 @@ use App\Models\DetailBulananModel;
 use App\Models\MemoModel;
 use App\Models\PengajuanModel;
 use App\Models\StatusModel;
+use App\Models\TokoModel;
 
 use CodeIgniter\Session\Session;
 
@@ -179,5 +180,6 @@ abstract class BaseController extends Controller
         $this->MemoModel  = new MemoModel();
         $this->PengajuanModel  = new PengajuanModel();
         $this->StatusModel  = new StatusModel();
+        $this->TokoModel  = new TokoModel();
     }
 }

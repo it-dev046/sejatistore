@@ -9,5 +9,10 @@ class KasbonModel extends Model
     protected $table            = 'kasbon';
     protected $primaryKey       = 'id_kasbon';
     protected $returnType       = 'object';
-    protected $allowedFields    = ['tanggal', 'nama', 'jumlah', 'tempo', 'potongan', 'sisa', 'keterangan'];
+    protected $allowedFields    = ['tanggal', 'id_rekening', 'jumlah', 'sisa', 'keterangan'];
+
+    public function isInvoiceExists($id_rekening)
+    {
+        return $this->where('id_rekening', $id_rekening)->countAllResults() > 0;
+    }
 }

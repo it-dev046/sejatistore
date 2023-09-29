@@ -9,7 +9,7 @@ class RPTController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Halaman Rancangan Pembayaran Tukang',
+            'title' => 'Rancangan Pembayaran',
             'userId' => $this->session->get('id'),
             'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
             'daftar_hbk' => $this->HbkModel->orderBy('id_hbk', 'DESC')
@@ -44,7 +44,7 @@ class RPTController extends BaseController
             ];
             $this->RPTModel->insert($data);
 
-            return redirect()->back()->with('success', 'Rancangan Pembayaran Tukang Berhasil Ditambahkan');
+            return redirect()->back()->with('success', 'Rancangan Pembayaran Berhasil Ditambahkan');
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
         }
@@ -64,7 +64,7 @@ class RPTController extends BaseController
             ];
             $this->RPTModel->update($id_rpt, $data);
 
-            return redirect()->back()->with('success', 'Rancangan Pembayaran Tukang Berhasil Diubah');
+            return redirect()->back()->with('success', 'Rancangan Pembayaran Berhasil Diubah');
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
         }
@@ -79,7 +79,7 @@ class RPTController extends BaseController
             // Hapus data
             $this->RPTModel->where('id_rpt', $id_rpt)->delete();
 
-            return redirect()->back()->with('success', 'Rancangan Pembayaran Tukang Berhasil Dihapus');
+            return redirect()->back()->with('success', 'Rancangan Pembayaran Berhasil Dihapus');
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
         }

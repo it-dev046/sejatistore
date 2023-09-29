@@ -12,9 +12,8 @@ class GatukController extends BaseController
             'title' => 'Halaman Gaji Tukang',
             'userId' => $this->session->get('id'),
             'daftar_gatuk' => $this->GatukModel->orderBy('id_gatuk', 'DESC')->findAll(),
-            'daftar_hbk' => $this->HbkModel->orderBy('id_hbk', 'DESC')
-                ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'left')
-                ->findAll()
+            'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
+            'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
         ];
 
         return view('admin/gatuk/index', $data);
@@ -26,22 +25,27 @@ class GatukController extends BaseController
         $userId = $this->request->getPost('userId');
 
         if ($userId == $cekid) {
-            $id_hbk = $this->request->getPost('id_hbk');
-            $hbk =  $this->HbkModel->orderBy('id_hbk', 'DESC')
-                ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'left')
-                ->where('id_hbk', $id_hbk)->first();
+            $id_rpt = $this->request->getPost('id_rpt');
+            $id_rekening = $this->request->getPost('id_rekening');
+            $rpt =  $this->rptModel->orderBy('id_rpt', 'DESC')
+                ->join('pemasangan', 'pemasangan.id_pasang = rpt.id_pasang', 'left')
+                ->where('id_rpt', $id_rpt)->first();
+            $cek = $this->KasbonModel->isInvoiceExists($id_rekening);
+            $potongan = $this->request->getPost('potongan');
+            if ($cek) {
+                $kasbon = $this->KasbonModel->orderBy('id_kasbon', 'ASC')
+                    ->where('id_rekening', $id_rekening)->first();
+            }
 
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'rek' => esc($this->request->getPost('rek')),
-                'bank' => esc($this->request->getPost('bank')),
-                'AN' => esc($this->request->getPost('AN')),
-                'keterangan' => esc($this->request->getPost('keterangan')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'nilai' => esc($this->request->getPost('nilai')),
-                'invoice' => $hbk->invoice,
-                'penerima' => $hbk->tukang,
-                'sisa_hbk' => $hbk->sisa_hbk,
+                'potongan' => esc($this->request->getPost('potongan')),
+                'keterangan' => esc($this->request->getPost('keterangan')),
+                'invoice' => $rpt->invoice,
+                'sisa_hbk' => $sisa_hbk,
             ];
             $this->GatukModel->insert($data);
 

@@ -29,7 +29,17 @@ class GajiController extends BaseController
             $potongan = $this->request->getPost('potongan');
             $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
 
-            $total = $karyawan->gapok + $karyawan->bonus - $potongan;
+            $tanggal = $this->request->getPost('tanggal');
+            $dateParts = date_parse($tanggal);
+            $nama = $karyawan->nama;
+            $bulan = $dateParts['month'];
+            $tahun = $dateParts['year'];
+            $bulanan = $this->AbsenModel->bulanan($nama, $bulan, $tahun);
+            if (empty($bulanan)) {
+                $total = $karyawan->gapok + $karyawan->bonus - $potongan;
+            } else {
+                $total = $karyawan->gapok - $potongan;
+            }
 
             //simpan data database
             $data = [

@@ -11,7 +11,9 @@ class PiutangController extends BaseController
         $data = [
             'title' => 'Halaman Piutang',
             'userId' => $this->session->get('id'),
-            'daftar_piutang' => $this->PiutangModel->orderBy('id_piutang', 'DESC')->findAll(),
+            'daftar_piutang' => $this->PiutangModel->orderBy('id_piutang', 'DESC')
+                ->join('rekening', 'rekening.id_rekening = piutang.id_rekening', 'left')->findAll(),
+            'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
         ];
 
         return view('admin/piutang/index', $data);
@@ -27,7 +29,7 @@ class PiutangController extends BaseController
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'nama' => esc($this->request->getPost('nama')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'alamat' => esc($this->request->getPost('alamat')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'saldo' => 0,
@@ -48,7 +50,7 @@ class PiutangController extends BaseController
         if ($userId == $cekid) {
             //simpan data database
             $data = [
-                'nama' => esc($this->request->getPost('nama')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'alamat' => esc($this->request->getPost('alamat')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
             ];
@@ -82,7 +84,9 @@ class PiutangController extends BaseController
         $piutang = $this->PiutangModel->where('id_piutang', $id_piutang)->first();
         $data = [
             'title' => 'Halaman Detail Piutang',
-            'piutang' => $this->PiutangModel->where('id_piutang', $id_piutang)->first(),
+            'piutang' => $this->PiutangModel->where('id_piutang', $id_piutang)
+                ->join('rekening', 'rekening.id_rekening = piutang.id_rekening', 'left')
+                ->first(),
             'daftar_uraian' => $this->DetailPiutangModel
                 ->where('id_piutang', $piutang->id_piutang)
                 ->orderBy('tanggal', 'DESC')

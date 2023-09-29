@@ -93,8 +93,6 @@ class HutangController extends BaseController
                 ->join('rekening', 'rekening.id_rekening = hutang.id_rekening', 'left')
                 ->where('id_hutang', $id_hutang)
                 ->first(),
-            'daftar_sumber' => $this->SumberKasModel->orderBy('keterangan', 'ASC')
-                ->findAll(),
             'daftar_uraian' => $this->DetailHutangModel
                 ->where('id_hutang', $hutang->id_hutang)
                 ->orderBy('tanggal', 'DESC')

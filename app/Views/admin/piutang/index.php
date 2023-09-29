@@ -34,13 +34,19 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-4">
                                         <label for="nama">
                                             <h6>Nama</h6>
                                         </label>
-                                        <input type="text" name="nama" id="nama" class="form-control" required>
+                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                            <option value="" hidden>--Pilih--</option>
+                                            <!-- panggil data Sumber -->
+                                            <?php foreach ($daftar_rekening as $key => $rekening) { ?>
+                                                <option value="<?= $rekening->id_rekening ?>"><?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-3">
                                         <label for="alamat">
                                             <h6>Alamat</h6>
                                         </label>
@@ -52,10 +58,8 @@
                                         </label>
                                         <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="3" required></textarea>
                                     </div>
-                                    <div class="mb-3 col-1 mt-5">
-                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
-                                    </div>
                                 </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
                             </form>
                             <hr>
 
@@ -77,7 +81,7 @@
                                         <tr>
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
-                                            <td> <?= $value->nama; ?> </td>
+                                            <td> <?= $value->usaha; ?> </td>
                                             <td> <?= $value->alamat; ?> </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
@@ -119,7 +123,13 @@
                                 <label for="nama">
                                     <h6>Nama</h6>
                                 </label>
-                                <input type="text" name="nama" id="nama" class="form-control" value="<?= $piutang->nama; ?>" required>
+                                <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                    <?php foreach ($daftar_rekening as $a) : ?>
+                                        <option value="<?= $a->id_rekening; ?>" <?= $a->id_rekening == $piutang->id_rekening ? 'selected' : null ?>>
+                                            <?= $a->usaha; ?> (<?= $a->bank ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
                             </div>
                             <div class="mb-3">
                                 <label for="alamat">
@@ -170,7 +180,7 @@
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Nama</td>
-                                    <td> : <strong><?= $piutang->nama ?></strong></td>
+                                    <td> : <strong><?= $piutang->usaha ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Alamat</td>

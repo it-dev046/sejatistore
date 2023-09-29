@@ -36,6 +36,7 @@
                                         <th>Pemesan</th>
                                         <th>Penerima</th>
                                         <th>Pekerjaan</th>
+                                        <th>Status</th>
                                         <th>Orderan</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -49,17 +50,41 @@
                                             <td> <?= date('d M Y', strtotime($order->tanggal)); ?></td>
                                             <td> <?= $order->pemesan; ?> </td>
                                             <td> <?= $order->penerima; ?> </td>
-                                            <td> <?= $order->kerja; ?> </td>
-                                            <td> <?= $order->status; ?> </td>
+                                            <td> <?= $order->kerja; ?> <br> ( <?= $order->keterangan; ?> ) </td>
+                                            <td>
+                                                <?php if ($order->bukti <> "Belum") { ?>
+                                                    <a href="<?= base_url('order/nota/gambar/' . $order->id_order) ?>" class="btn btn-warning btn-sm">
+                                                        <i class="fas fa-list-alt"></i>
+                                                    </a>
+                                                    <a href="<?= base_url('order/bukti/gambar/' . $order->id_order) ?>" class="btn btn-dark btn-sm">
+                                                        <i class="fas fa-file"></i>
+                                                    </a>
+                                                <?php } elseif ($order->nota <> "Belum") { ?>
+                                                    <a href="<?= base_url('order/nota/gambar/' . $order->id_order) ?>" class="btn btn-warning btn-sm">
+                                                        <i class="fas fa-list-alt"></i>
+                                                    </a>
+                                                <?php } else { ?>
+                                                    <?= $order->status; ?>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                $no = 1;
+                                                foreach ($daftar_uraian as $key => $value) {
+                                                    if ($value->id_order == $order->id_order) { ?>
+                                                        <?= $no++; ?> . <?= $value->nama ?> ( <?= $value->jumlah ?> ) <br>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </td>
                                             <td class="text-canter">
                                                 <a href="<?= base_url('order/uraian/' . $order->id_order) ?>" class="btn btn-info btn-sm">
-                                                    <i class="fas fa-list"></i> Detail
-                                                </a>
+                                                    <i class="fas fa-list"></i>
+                                                </a><br>
                                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $order->id_order; ?>">
-                                                    <i class="fas fa-edit"></i> Edit
-                                                </button>
+                                                    <i class="fas fa-edit"></i>
+                                                </button><br>
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $order->id_order; ?>">
-                                                    <i class="fas fa-trash-alt"></i> Hapus
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </td>
                                         </tr>
@@ -85,7 +110,7 @@
                     <form action="<?= base_url('order/tambah') ?>" method="post">
                         <?= csrf_field() ?>
                         <div class="mb-3">
-                            <label for="pemesan">Pemesanan</label>
+                            <label for="pemesan">Pemesan</label>
                             <input type="text" name="pemesan" id="pemesan" class="form-control" required>
                         </div>
                         <div class="mb-3">

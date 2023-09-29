@@ -189,6 +189,11 @@ if ($level == "1") {
     $routes->get('order/uraian/batal/(:num)', 'OrderController::uraianbatal/$1', ['filter' => 'isLoggedIn']);
     $routes->get('order/nota/gambar/(:num)', 'OrderController::unduhnota/$1', ['filter' => 'isLoggedIn']);
     $routes->get('order/bukti/gambar/(:num)', 'OrderController::unduhbukti/$1', ['filter' => 'isLoggedIn']);
+
+    $routes->get('toko', 'TokoController::index', ['filter' => 'isLoggedIn']);
+    $routes->post('toko/tambah', 'TokoController::store', ['filter' => 'isLoggedIn']);
+    $routes->put('toko/ubah/(:num)', 'TokoController::update/$1', ['filter' => 'isLoggedIn']);
+    $routes->delete('toko/hapus/(:num)', 'TokoController::destroy/$1', ['filter' => 'isLoggedIn']);
 } elseif ($level == "4") {
     $routes->get('dashboard-survei', 'Dashboard::survei', ['filter' => 'isLoggedIn']);
     $routes->get('survei', 'SurveiController::index', ['filter' => 'isLoggedIn']);

@@ -36,40 +36,34 @@
                                     </div>
                                     <div class="mb-3 col-7">
                                         <label for="nilai">
-                                            <h6>Pilih Invoice</h6>
+                                            <h6>Rancangan Pembayaran</h6>
                                         </label>
-                                        <select name="id_hbk" id="id_hbk" class="form-control" required>
+                                        <select name="id_rpt" id="id_rpt" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
-                                            <?php foreach ($daftar_hbk as $key => $hbk) { ?>
-                                                <option value="<?= $hbk->id_hbk ?>"><?= $hbk->invoice ?> -- <?= $hbk->nama ?> (<?= $hbk->alamat ?>) -- <?= $hbk->tukang ?> --
-                                                    <?= number_to_currency($hbk->sisa_hbk, 'IDR', 'id_ID',) ?></option>
+                                            <?php foreach ($daftar_rpt as $key => $daftar_rpt) { ?>
+                                                <option value="<?= $daftar_rpt->id_rpt ?>"><?= $daftar_rpt->invoice ?> -- <?= $daftar_rpt->nama ?> (<?= $daftar_rpt->alamat ?>) -- <?= $daftar_rpt->tukang ?> --
+                                                    <?= number_to_currency($daftar_rpt->bayar, 'IDR', 'id_ID',) ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
                                     <div class="mb-3 col-2">
-                                        <label for="nilai">
-                                            <h6>Nominal</h6>
+                                        <label for="potongan">
+                                            <h6>Potongan</h6>
                                         </label>
-                                        <input type="number" name="nilai" id="nilai" class="form-control" required>
+                                        <input type="number" name="potongan" id="potongan" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="rek">
-                                            <h6>No Rekeing</h6>
+                                    <div class="mb-3 col-4">
+                                        <label for="nama">
+                                            <h6>Nama</h6>
                                         </label>
-                                        <input type="text" name="rek" id="rek" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="AN">
-                                            <h6>Atas Nama</h6>
-                                        </label>
-                                        <input type="text" name="AN" id="AN" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="bank">
-                                            <h6>Bank</h6>
-                                        </label>
-                                        <input type="text" name="bank" id="bank" class="form-control" required>
+                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                            <option value="" hidden>--Pilih--</option>
+                                            <!-- panggil data Sumber -->
+                                            <?php foreach ($daftar_rekening as $key => $rekening) { ?>
+                                                <option value="<?= $rekening->id_rekening ?>"><?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-3">
                                         <label for="keterangan">

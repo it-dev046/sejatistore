@@ -13,6 +13,7 @@ class OrderController extends BaseController
             'userId' => $this->session->get('id'),
             'level' => $this->session->get('level'),
             'daftar_order' => $this->OrderModel->orderBy('id_order', 'DESC')->findAll(),
+            'daftar_uraian' => $this->DetailorderModel->orderBy('id_order', 'DESC')->findAll(),
         ];
 
         return view('admin/order/index', $data);
@@ -80,7 +81,7 @@ class OrderController extends BaseController
 
             //simpan data ke database
             $data = [
-                'toko' => esc($this->request->getPost('toko')),
+                'id_toko' => esc($this->request->getPost('id_toko')),
                 'nota' => $nama_file,
                 'status' => $status,
             ];
@@ -133,6 +134,19 @@ class OrderController extends BaseController
     public function destroy($id_order)
     {
         // Hapus data
+        $order = $this->OrderModel->where('id_order', $id_order)->first();
+        $bukti = $order->bukti;
+        if ($bukti == "") {
+        } else {
+            unlink('foto/order/' . $bukti);
+        }
+
+        $nota = $order->nota;
+        if ($nota == "") {
+        } else {
+            unlink('foto/order/' . $nota);
+        }
+        $this->DetailorderModel->where('id_order', $id_order)->delete();
         $this->OrderModel->where('id_order', $id_order)->delete();
 
         return redirect()->back()->with('success', 'Data order Berhasil Dihapus');
@@ -146,7 +160,12 @@ class OrderController extends BaseController
             'title' => 'Halaman Detail Order',
             'userId' => $this->session->get('id'),
             'level' => $this->session->get('level'),
-            'order' => $this->OrderModel->where('id_order', $id_order)->first(),
+            'order' => $this->OrderModel
+                ->join('toko', 'toko.id_toko=order.id_toko', 'left')
+                ->select('order.*, toko.nama, toko.rek1, toko.rek2, toko.rek3, toko.keterangan AS ket')
+                ->where('id_order', $id_order)
+                ->first(),
+            'daftar_toko' => $this->TokoModel->orderBy('nama', 'ASC')->findAll(),
             'daftar_uraian' => $this->DetailorderModel
                 ->where('id_order', $order->id_order)
                 ->findAll(),

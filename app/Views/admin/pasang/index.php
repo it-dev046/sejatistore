@@ -32,6 +32,8 @@
                                         <th>Invoice</th>
                                         <th>Nama Pemasangan</th>
                                         <th>Alamat</th>
+                                        <th>Drafter</th>
+                                        <th>Surveyor</th>
                                         <th>Total</th>
                                         <th>Aksi</th>
                                 <tbody>
@@ -43,6 +45,8 @@
                                             <td> <?= $pasang->invoice; ?> </td>
                                             <td> <?= $pasang->nama; ?> </td>
                                             <td> <?= $pasang->alamat; ?> </td>
+                                            <td> <?= $pasang->drafter; ?> </td>
+                                            <td> <?= $pasang->pengukur; ?> </td>
                                             <td> <?= number_to_currency($pasang->biaya, 'IDR', 'id_ID', 2) ?> </td>
                                             <td>
                                                 <a href="<?= base_url('invoice/' . $pasang->id_pasang . '/preview') ?>" class="btn btn-dark btn-sm">

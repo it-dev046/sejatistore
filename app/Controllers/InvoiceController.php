@@ -9,7 +9,10 @@ class InvoiceController extends BaseController
     {
         $data = [
             'title' => 'Halaman Invoice Pemasangan',
-            'daftar_pasang' => $this->PasangModel->orderBy('id_pasang', 'DESC')->findAll()
+            'daftar_pasang' => $this->PasangModel
+                ->join('survei', 'survei.id_survei = pemasangan.id_survei', 'left')
+                ->orderBy('id_pasang', 'DESC')
+                ->findAll()
         ];
 
         return view('admin/pasang/index', $data);

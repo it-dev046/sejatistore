@@ -70,6 +70,21 @@ $page = $this->PageModel->findAll();
                   <a class="nav-link" href="<?= base_url('kas/labarugi') ?>">Laba Rugi</a>
                 </nav>
               </div>
+              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts11" aria-expanded="false" aria-controls="collapseLayouts11">
+                <div class="sb-nav-link-icon">
+                  <i class="fas fa-box"></i>
+                </div>
+                Pengorderan
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
+              </a>
+              <div class="collapse" id="collapseLayouts11" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="<?= base_url('order') ?>">Order Barang</a>
+                  <a class="nav-link" href="<?= base_url('toko') ?>">Daftar Toko</a>
+                </nav>
+              </div>
               <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts6" aria-expanded="false" aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon">
                   <i class="fas fa-cash-register"></i>
@@ -98,7 +113,6 @@ $page = $this->PageModel->findAll();
                 <nav class="sb-sidenav-menu-nested nav">
                   <a class="nav-link" href="<?= base_url('invoice') ?>">Daftar Invoice</a>
                   <a class="nav-link" href="<?= base_url('hbk') ?>">Pembayaran HBK</a>
-                  <a class="nav-link" href="<?= base_url('order') ?>">Order Barang</a>
                 </nav>
               </div>
               <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts8" aria-expanded="false" aria-controls="collapseLayouts">
@@ -116,7 +130,6 @@ $page = $this->PageModel->findAll();
                   <a class="nav-link" href="<?= base_url('absen') ?>">Absensi</a>
                   <a class="nav-link" href="<?= base_url('ins') ?>">Insentif</a>
                   <a class="nav-link" href="<?= base_url('gaji') ?>">Gaji Karyawan</a>
-                  <a class="nav-link" href="<?= base_url('kasbon') ?>">Kasbon</a>
                 </nav>
               </div>
               <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts9" aria-expanded="false" aria-controls="collapseLayouts">
@@ -145,6 +158,7 @@ $page = $this->PageModel->findAll();
               </a>
               <div class="collapse" id="collapseLayouts10" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                 <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="<?= base_url('kasbon') ?>">Kasbon</a>
                   <a class="nav-link" href="<?= base_url('deposit') ?>">Deposit Costumer</a>
                   <a class="nav-link" href="<?= base_url('piutang') ?>">Piutang</a>
                   <a class="nav-link" href="<?= base_url('rekening') ?>">Rekening</a>
@@ -282,12 +296,21 @@ $page = $this->PageModel->findAll();
                 </div>
                 Bahan Pemasangan
               </a>
-              <a class="nav-link" href="<?= base_url('order') ?>">
+              <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts11" aria-expanded="false" aria-controls="collapseLayouts11">
                 <div class="sb-nav-link-icon">
                   <i class="fas fa-box"></i>
                 </div>
-                Order Barang
+                Pengorderan
+                <div class="sb-sidenav-collapse-arrow">
+                  <i class="fas fa-angle-down"></i>
+                </div>
               </a>
+              <div class="collapse" id="collapseLayouts11" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                <nav class="sb-sidenav-menu-nested nav">
+                  <a class="nav-link" href="<?= base_url('order') ?>">Order Barang</a>
+                  <a class="nav-link" href="<?= base_url('toko') ?>">Daftar Toko</a>
+                </nav>
+              </div>
               <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts2" aria-expanded="false" aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon">
                   <i class="fas fa-home"></i>

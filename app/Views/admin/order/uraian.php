@@ -118,9 +118,9 @@
                             <ol class="list-group list-group-numbered">
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
-                                        <div class="fw-bold">Nama Toko</div>
-                                        <?php if (!empty($order->toko)) {  ?>
-                                            <?= $order->toko; ?>
+                                        <div class="fw-bold">Nama Toko / Vendor</div>
+                                        <?php if (!empty($order->nama)) {  ?>
+                                            <?= $order->nama; ?> <?= $order->ket; ?>
                                         <?php } else {  ?>
                                             Belum diorder
                                         <?php } ?>
@@ -128,39 +128,40 @@
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
-                                        <?php if ($order->nota == "Belum") {  ?>
-                                            <div class="fw-bold">Nota Orderan</div>
-                                            <?= $order->nota; ?>
+                                        <div class="fw-bold">Rekening 1</div>
+                                        <?php if (!empty($order->rek1)) {  ?>
+                                            <?= $order->rek1; ?>
                                         <?php } else {  ?>
-                                            <div class="fw-bold">
-                                                <a href="<?= base_url('order/nota/gambar/' . $order->id_order) ?>" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-download"></i> Nota Orderan
-                                                </a>
-                                            </div>
+                                            Belum diorder
                                         <?php } ?>
                                     </div>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto"><?php if ($order->bukti == "Belum") {  ?>
-                                            <div class="fw-bold">Bukti Transfer</div>
-                                            <?= $order->bukti; ?>
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Rekening 2</div>
+                                        <?php if (!empty($order->rek2)) {  ?>
+                                            <?= $order->rek2; ?>
                                         <?php } else {  ?>
-                                            <div class="fw-bold">
-                                                <a href="<?= base_url('order/bukti/gambar/' . $order->id_order) ?>" class="btn btn-info btn-sm">
-                                                    <i class="fas fa-download"></i> Bukti Transfer
-                                                </a>
-                                            </div>
+                                            Belum diorder
                                         <?php } ?>
-
+                                    </div>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Rekening 3</div>
+                                        <?php if (!empty($order->rek3)) {  ?>
+                                            <?= $order->rek3; ?>
+                                        <?php } else {  ?>
+                                            Belum diorder
+                                        <?php } ?>
                                     </div>
                                 </li>
                             </ol>
                         </div>
-                        <?php if ($level == 1) { ?>
+                        <?php if ($level == 1 or $level == 2) { ?>
                             <button type="button" class="btn btn-warning btn-block m-2" data-bs-toggle="modal" data-bs-target="#notaModal">
                                 <i class="fas fa-upload"></i> Upload Nota Toko
                             </button>
-                        <?php } elseif ($level == 2) { ?>
                             <button type="button" class="btn btn-info btn-block m-2" data-bs-toggle="modal" data-bs-target="#buktiModal">
                                 <i class="fas fa-upload"></i> Upload Bukti Transfer
                             </button>
@@ -195,7 +196,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="jumlah">Jumlah</label>
-                            <input type="number" name="jumlah" id="jumlah" class="form-control" required>
+                            <input type="text" name="jumlah" id="jumlah" class="form-control" required>
                         </div>
                 </div>
                 <div class="modal-footer">
@@ -222,8 +223,14 @@
                         <?= csrf_field() ?>
                         <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
                         <div class="mb-3">
-                            <label for="toko">Nama Toko</label>
-                            <input type="text" name="toko" id="toko" class="form-control" required>
+                            <label for="toko">Nama Toko / Vendor</label>
+                            <select name="id_toko" id="id_toko" class="form-control" required>
+                                <option value="" hidden>--Pilih--</option>
+                                <!-- panggil data Sumber -->
+                                <?php foreach ($daftar_toko as $key => $toko) { ?>
+                                    <option value="<?= $toko->id_toko ?>"><?= $toko->nama ?> (<?= $toko->keterangan ?>)</option>
+                                <?php } ?>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="nota">Upload Nota</label>
@@ -290,7 +297,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="jumlah">Jumlah</label>
-                                <input type="number" name="jumlah" id="jumlah" class="form-control" value="<?= $value->jumlah; ?>" required>
+                                <input type="text" name="jumlah" id="jumlah" class="form-control" value="<?= $value->jumlah; ?>" required>
                             </div>
                     </div>
                     <div class="modal-footer">
