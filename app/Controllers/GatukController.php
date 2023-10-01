@@ -15,7 +15,9 @@ class GatukController extends BaseController
                 ->join('rekening', 'rekening.id_rekening = gatuk.id_rekening', 'left')->findAll(),
             'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
             'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')
-                ->join('kasbon', 'kasbon.id_rekening = rekening.id_rekening', 'left')->findAll(),
+                ->join('kasbon', 'kasbon.id_rekening = rekening.id_rekening', 'left')
+                ->select('rekening.*, kasbon.sisa')
+                ->findAll(),
         ];
 
         return view('admin/gatuk/index', $data);

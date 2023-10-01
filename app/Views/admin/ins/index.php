@@ -87,12 +87,34 @@
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
                                             <td> <?= $value->nama; ?> </td>
                                             <td>
-                                                OP : <?= number_to_currency($value->op, 'IDR', 'id_ID',) ?> <br>
-                                                UM : <?= number_to_currency($value->um, 'IDR', 'id_ID',) ?> <br>
+                                                OP :
+                                                <?php if (!empty($value->op)) { ?>
+                                                    <?= number_to_currency($value->op, 'IDR', 'id_ID', 2) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                                <br>
+                                                UM :
+                                                <?php if (!empty($value->um)) { ?>
+                                                    <?= number_to_currency($value->um, 'IDR', 'id_ID', 2) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                                <br>
                                                 Potongan + Absensi : <br>
-                                                ( <?= number_to_currency($value->potongan, 'IDR', 'id_ID',) ?> )
+                                                <?php if (!empty($value->potongan)) { ?>
+                                                    (<?= number_to_currency($value->potongan, 'IDR', 'id_ID', 2) ?>)
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
                                             </td>
-                                            <td> <?= number_to_currency($value->total, 'IDR', 'id_ID',) ?></td>
+                                            <td>
+                                                <?php if (!empty($value->total)) { ?>
+                                                    <?= number_to_currency($value->total, 'IDR', 'id_ID', 2) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
                                             <td> <?= $value->rekening; ?> <br> (<?= $value->bank; ?>) </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">

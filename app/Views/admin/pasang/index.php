@@ -47,7 +47,13 @@
                                             <td> <?= $pasang->alamat; ?> </td>
                                             <td> <?= $pasang->drafter; ?> </td>
                                             <td> <?= $pasang->pengukur; ?> </td>
-                                            <td> <?= number_to_currency($pasang->biaya, 'IDR', 'id_ID', 2) ?> </td>
+                                            <td>
+                                                <?php if (!empty($pasang->biaya)) { ?>
+                                                    <?= number_to_currency($pasang->biaya, 'IDR', 'id_ID', 2) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
                                             <td>
                                                 <a href="<?= base_url('invoice/' . $pasang->id_pasang . '/preview') ?>" class="btn btn-dark btn-sm">
                                                     <i class="fas fa-list"></i> Detail

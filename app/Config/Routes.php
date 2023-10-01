@@ -502,6 +502,11 @@ if ($level == "1") {
 
     $routes->get('cetak/(:segment)/nota', 'CetakController::nota/$1', ['filter' => 'isLoggedIn']);
     $routes->get('cetak/(:segment)/suratjalan', 'CetakController::suratjalan/$1', ['filter' => 'isLoggedIn']);
+
+    $routes->get('toko', 'TokoController::index', ['filter' => 'isLoggedIn']);
+    $routes->post('toko/tambah', 'TokoController::store', ['filter' => 'isLoggedIn']);
+    $routes->put('toko/ubah/(:num)', 'TokoController::update/$1', ['filter' => 'isLoggedIn']);
+    $routes->delete('toko/hapus/(:num)', 'TokoController::destroy/$1', ['filter' => 'isLoggedIn']);
 }
 
 /*

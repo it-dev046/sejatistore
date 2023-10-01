@@ -205,7 +205,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action=" <?= base_url('absen/status/hapus/' . $absen->id_absen) ?>" method="post">
+                    <form action=" <?= base_url('absen/hapus/' . $absen->id_absen) ?>" method="post">
                         <?= csrf_field() ?>
                         <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
                         <input type="hidden" name="_method" value="DELETE">
