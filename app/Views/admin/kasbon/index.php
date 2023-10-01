@@ -13,7 +13,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Daftar Kasbon Karyawan
+                            Daftar Kasbon
                         </div>
                         <div class="card-body">
 
@@ -34,35 +34,23 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-4">
                                         <label for="nilai">
-                                            <h6>Nama karyawan</h6>
+                                            <h6>Nama</h6>
                                         </label>
-                                        <select name="id_karyawan" id="id_karyawan" class="form-control" required>
+                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
-                                            <?php foreach ($daftar_karyawan as $key => $karyawan) { ?>
-                                                <option value="<?= $karyawan->id_karyawan ?>"><?= $karyawan->nama ?> (<?= $karyawan->posisi ?>)</option>
+                                            <?php foreach ($daftar_rekening as $key => $rekening) { ?>
+                                                <option value="<?= $rekening->id_rekening ?>"><?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
                                             <?php } ?>
                                         </select>
                                     </div>
                                     <div class="mb-3 col-2">
                                         <label for="jumlah">
-                                            <h6>Nominal kasbon</h6>
+                                            <h6>Nominal</h6>
                                         </label>
                                         <input type="number" name="jumlah" id="jumlah" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="tempo">
-                                            <h6>Jatuh Tempo</h6>
-                                        </label>
-                                        <input type="date" name="tempo" id="tempo" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="potongan">
-                                            <h6>Potongan</h6>
-                                        </label>
-                                        <input type="number" name="potongan" id="potongan" class="form-control" required>
                                     </div>
                                     <div class="mb-3 col-3">
                                         <label for="keterangan">
@@ -83,9 +71,7 @@
                                         <th>No</th>
                                         <th>Tanggal</th>
                                         <th>Nama</th>
-                                        <th>Nominal Kasbon</th>
-                                        <th>Jatuh tempo</th>
-                                        <th>Potongan</th>
+                                        <th>Pinjaman</th>
                                         <th>Sisa</th>
                                         <th>Keterangan</th>
                                         <th>Aksi</th>
@@ -98,10 +84,8 @@
                                         <tr>
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
-                                            <td> <?= $value->nama; ?> </td>
+                                            <td> <?= $value->usaha; ?> </td>
                                             <td> <?= number_to_currency($value->jumlah, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= date('d M Y', strtotime($value->tempo)) ?></td>
-                                            <td> <?= number_to_currency($value->potongan, 'IDR', 'id_ID',) ?></td>
                                             <td> <?= number_to_currency($value->sisa, 'IDR', 'id_ID',) ?></td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
@@ -128,7 +112,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Ubah Kasbon Karyawan</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Ubah Kasbon</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -136,24 +120,14 @@
                             <?= csrf_field() ?>
                             <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
                             <input type="hidden" name="_method" value="PUT">
-                            <div class="mb-3">
-                                <label for="jumlah">
-                                    <h6>Nominal Kasbon</h6>
-                                </label>
-                                <input type="number" name="jumlah" id="jumlah" class="form-control" value="<?= $kasbon->jumlah; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="tempo">
-                                    <h6>Jatuh Tempo</h6>
-                                </label>
-                                <input type="date" name="tempo" id="tempo" class="form-control" value="<?= $kasbon->tempo; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="potongan">
-                                    <h6>Potongan</h6>
-                                </label>
-                                <input type="number" name="potongan" id="potongan" class="form-control" value="<?= $kasbon->potongan; ?>" required>
-                            </div>
+                            <?php if ($kasbon->jumlah == $kasbon->sisa) { ?>
+                                <div class="mb-3">
+                                    <label for="jumlah">
+                                        <h6>Nominal Kasbon</h6>
+                                    </label>
+                                    <input type="number" name="jumlah" id="jumlah" class="form-control" value="<?= $kasbon->jumlah; ?>" required>
+                                </div>
+                            <?php } ?>
                             <div class="mb-3">
                                 <label for="keterangan">
                                     <h6>Keterangan</h6>
@@ -177,7 +151,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus Kasbon Karyawan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus Kasbon</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -189,7 +163,7 @@
                         <table class="table table-borderless table-sm">
                             <tbody>
                                 <tr>
-                                    <td colspan="2" scope="row">Yakin Kasbon Karyawan Karyawan</td>
+                                    <td colspan="2" scope="row">Yakin Kasbon</td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="100px">Tanggal</td>
@@ -197,15 +171,11 @@
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Nama</td>
-                                    <td> : <strong><?= $kasbon->nama ?></strong></td>
+                                    <td> : <strong><?= $kasbon->usaha ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Nominal Kasbon</td>
                                     <td> : <strong><?= number_to_currency($kasbon->jumlah, 'IDR', 'id_ID',) ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Jatuh tempo</td>
-                                    <td> : <strong><?= date('d F Y', strtotime($kasbon->tempo)) ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Sisa Kasbon</td>

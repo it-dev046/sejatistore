@@ -7,10 +7,11 @@ class KasbonController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Halaman kasbon Karyawan',
+            'title' => 'Halaman Kasbon',
             'userId' => $this->session->get('id'),
-            'daftar_kasbon' => $this->KasbonModel->orderBy('id_kasbon', 'DESC')->findAll(),
-            'daftar_karyawan' => $this->KaryawanModel->orderBy('id_karyawan', 'DESC')->findAll(),
+            'daftar_kasbon' => $this->KasbonModel->orderBy('id_kasbon', 'DESC')
+                ->join('rekening', 'rekening.id_rekening = kasbon.id_rekening', 'left')->findAll(),
+            'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
         ];
 
         return view('admin/kasbon/index', $data);
@@ -22,22 +23,13 @@ class KasbonController extends BaseController
         $userId = $this->request->getPost('userId');
 
         if ($userId == $cekid) {
-            $id_karyawan = $this->request->getPost('id_karyawan');
-            $potongan = $this->request->getPost('potongan');
-            $jumlah = $this->request->getPost('jumlah');
-            $sisa = $jumlah - $potongan;
-
-            $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
-
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'tempo' => esc($this->request->getPost('tempo')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
-                'nama' => $karyawan->nama,
-                'jumlah' => $jumlah,
-                'sisa' => $sisa,
-                'potongan' => $potongan,
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
+                'jumlah' => esc($this->request->getPost('jumlah')),
+                'sisa' => esc($this->request->getPost('jumlah')),
             ];
             $this->KasbonModel->insert($data);
 

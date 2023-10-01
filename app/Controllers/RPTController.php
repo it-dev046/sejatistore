@@ -14,6 +14,7 @@ class RPTController extends BaseController
             'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
             'daftar_hbk' => $this->HbkModel->orderBy('id_hbk', 'DESC')
                 ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'left')
+                ->where('sisa_hbk >', 0)
                 ->findAll()
         ];
 
@@ -35,7 +36,6 @@ class RPTController extends BaseController
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
-                'bayar' => esc($this->request->getPost('bayar')),
                 'nama' => $hbk->nama,
                 'alamat' => $hbk->alamat,
                 'invoice' => $hbk->invoice,
@@ -60,7 +60,6 @@ class RPTController extends BaseController
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
-                'bayar' => esc($this->request->getPost('bayar')),
             ];
             $this->RPTModel->update($id_rpt, $data);
 

@@ -13,7 +13,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Daftar Rancangan Pembayaran Tukang
+                            Daftar Rancangan Pembayaran
                         </div>
                         <div class="card-body">
 
@@ -47,22 +47,14 @@
                                             <?php } ?>
                                         </select>
                                     </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="bayar">
-                                            <h6>Nominal</h6>
-                                        </label>
-                                        <input type="number" name="bayar" id="bayar" class="form-control" required>
-                                    </div>
                                     <div class="mb-3 col-3">
                                         <label for="keterangan">
                                             <h6>Keterangan</h6>
                                         </label>
                                         <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="3" required></textarea>
                                     </div>
-                                    <div class="mb-3 col-1 mt-5">
-                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
-                                    </div>
                                 </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
                             </form>
                             <hr>
 
@@ -91,7 +83,7 @@
                                             <td> <?= $value->nama; ?> (<?= $value->alamat; ?>)</td>
                                             <td> <?= $value->tukang; ?> </td>
                                             <td> <?= number_to_currency($value->sisa_hbk, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($value->bayar, 'IDR', 'id_ID',) ?></td>
+                                            <td></td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
                                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id_rpt; ?>">
@@ -117,7 +109,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Ubah Rancangan Pembayaran Tukang</h5>
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Ubah Rancangan Pembayaran</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -130,12 +122,6 @@
                                     <h6>tanggal</h6>
                                 </label>
                                 <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $rpt->tanggal; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="bayar">
-                                    <h6>Nominal Pembayaran</h6>
-                                </label>
-                                <input type="number" name="bayar" id="bayar" class="form-control" value="<?= $rpt->bayar; ?>" required>
                             </div>
                             <div class="mb-3">
                                 <label for="keterangan">
@@ -160,7 +146,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus Rancangan Pembayaran Tukang</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus Rancangan Pembayaran</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -172,7 +158,7 @@
                         <table class="table table-borderless table-sm">
                             <tbody>
                                 <tr>
-                                    <td colspan="2" scope="row">Yakin Rancangan Pembayaran Tukang</td>
+                                    <td colspan="2" scope="row">Yakin Rancangan Pembayaran</td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="100px">Tanggal</td>
@@ -185,10 +171,6 @@
                                 <tr>
                                     <td scope="row" width="150px">Alamat</td>
                                     <td> : <strong><?= $rpt->alamat ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Nominal</td>
-                                    <td> : <strong><?= number_to_currency($rpt->bayar, 'IDR', 'id_ID',) ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Keterangan</td>

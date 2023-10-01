@@ -9,5 +9,5 @@ class PengajuanModel extends Model
     protected $table            = 'pengajuan';
     protected $primaryKey       = 'id_pengajuan';
     protected $returnType       = 'object';
-    protected $allowedFields    = ['tanggal', 'nama', 'rek', 'nilai', 'keterangan'];
+    protected $allowedFields    = ['tanggal', 'id_rekening', 'nilai', 'keterangan'];
 }

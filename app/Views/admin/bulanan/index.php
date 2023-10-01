@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="mb-3 col-2">
                                         <label for="nomor">
-                                            <h6>ID</h6>
+                                            <h6>No Pembayaran</h6>
                                         </label>
                                         <input type="text" name="nomor" id="nomor" class="form-control" required>
                                     </div>
@@ -65,7 +65,7 @@
                                         <th>No</th>
                                         <th>Per Tanggal</th>
                                         <th>Nama Pembayaran</th>
-                                        <th>ID</th>
+                                        <th>No Pembayaran</th>
                                         <th>Keterangan</th>
                                         <th>Aksi</th>
                                     </tr>

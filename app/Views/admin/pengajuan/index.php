@@ -34,17 +34,17 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-4">
                                         <label for="nama">
                                             <h6>Nama</h6>
                                         </label>
-                                        <input type="text" name="nama" id="nama" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="rek">
-                                            <h6>No Rekening</h6>
-                                        </label>
-                                        <input type="text" name="rek" id="rek" class="form-control" required>
+                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                            <option value="" hidden>--Pilih--</option>
+                                            <!-- panggil data Sumber -->
+                                            <?php foreach ($daftar_rekening as $key => $rekening) { ?>
+                                                <option value="<?= $rekening->id_rekening ?>"><?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-2">
                                         <label for="nilai">
@@ -84,8 +84,8 @@
                                         <tr>
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
-                                            <td> <?= $value->nama; ?> </td>
-                                            <td> <?= $value->rek; ?> </td>
+                                            <td> <?= $value->usaha; ?> </td>
+                                            <td> <?= $value->AN; ?> <br> (<?= $value->bank; ?>) <br> <?= $value->rek; ?> </td>
                                             <td> <?= number_to_currency($value->nilai, 'IDR', 'id_ID',) ?></td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
@@ -120,25 +120,6 @@
                             <?= csrf_field() ?>
                             <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
                             <input type="hidden" name="_method" value="PUT">
-
-                            <div class="mb-3">
-                                <label for="nilai">
-                                    <h6>Tanggal Pengajuan</h6>
-                                </label>
-                                <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $pengajuan->tanggal; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="nama">
-                                    <h6>Nama</h6>
-                                </label>
-                                <input type="text" name="nama" id="nama" class="form-control" value="<?= $pengajuan->nama; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="rek">
-                                    <h6>No Rekening</h6>
-                                </label>
-                                <input type="text" name="rek" id="rek" class="form-control" value="<?= $pengajuan->rek; ?>" required>
-                            </div>
                             <div class="mb-3">
                                 <label for="nilai">
                                     <h6>Nominal</h6>
@@ -188,11 +169,7 @@
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Nama</td>
-                                    <td> : <strong><?= $pengajuan->nama ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Rekening</td>
-                                    <td> : <strong><?= $pengajuan->rek ?></strong></td>
+                                    <td> : <strong><?= $pengajuan->usaha ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Nominal</td>

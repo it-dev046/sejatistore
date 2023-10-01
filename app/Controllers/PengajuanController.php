@@ -11,7 +11,9 @@ class PengajuanController extends BaseController
         $data = [
             'title' => 'Halaman Pengajuan Dana',
             'userId' => $this->session->get('id'),
-            'daftar_pengajuan' => $this->PengajuanModel->orderBy('id_pengajuan', 'DESC')->findAll(),
+            'daftar_pengajuan' => $this->PengajuanModel->orderBy('id_pengajuan', 'DESC')
+                ->join('rekening', 'rekening.id_rekening = pengajuan.id_rekening', 'left')->findAll(),
+            'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
         ];
 
         return view('admin/pengajuan/index', $data);
@@ -27,7 +29,7 @@ class PengajuanController extends BaseController
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'nama' => esc($this->request->getPost('nama')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'rek' => esc($this->request->getPost('rek')),
                 'nilai' => esc($this->request->getPost('nilai')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
@@ -49,8 +51,7 @@ class PengajuanController extends BaseController
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'nama' => esc($this->request->getPost('nama')),
-                'rek' => esc($this->request->getPost('rek')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'nilai' => esc($this->request->getPost('nilai')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
             ];
