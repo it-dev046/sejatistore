@@ -11,8 +11,12 @@ class GatukController extends BaseController
         $data = [
             'title' => 'Halaman Gaji Tukang',
             'userId' => $this->session->get('id'),
-            'daftar_gatuk' => $this->GatukModel->orderBy('id_gatuk', 'DESC')
-                ->join('rekening', 'rekening.id_rekening = gatuk.id_rekening', 'left')->findAll(),
+            'daftar_gatuk' => $this->GatukModel
+                ->join('rekening', 'rekening.id_rekening = gatuk.id_rekening', 'left')
+                ->join('rpt', 'rpt.invoice = gatuk.invoice', 'left')
+                ->select('gatuk.*, rekening.*, rpt.nama, rpt.alamat')
+                ->orderBy('gatuk.tanggal', 'DESC')
+                ->findAll(),
             'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
             'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')
                 ->join('kasbon', 'kasbon.id_rekening = rekening.id_rekening', 'left')
@@ -58,6 +62,7 @@ class GatukController extends BaseController
                 'potongan' => esc($this->request->getPost('potongan')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'invoice' => $rpt->invoice,
+                'tukang' => $rpt->tukang,
                 'sisa_hbk' => $sisa,
             ];
             $this->GatukModel->insert($data);
@@ -96,6 +101,39 @@ class GatukController extends BaseController
             return redirect()->back()->with('success', 'Gaji Tukang Berhasil Dihapus');
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
+        }
+    }
+
+    public function laporan()
+    {
+        $tanggal = $this->request->getPost('tanggal');
+        $cek = $this->GatukModel->cek($tanggal);
+
+        if (!empty($cek)) {
+            $jumlahnilai = $this->GatukModel->jumlahnilai($tanggal);
+            $jumlahpotongan = $this->GatukModel->jumlahpotongan($tanggal);
+            $jumlahtotal = $jumlahnilai - $jumlahpotongan;
+
+            $data = [
+                'title' => 'Laporan Gaji Tukang ' . date('d F Y', strtotime($tanggal)),
+                'tanggal' => $tanggal,
+                'daftar_tukang' => $this->GatukModel->orderBy('id_gatuk', 'DESC')
+                    ->where('DATE(gatuk.tanggal) =', $tanggal)
+                    ->distinct()
+                    ->select('tukang')
+                    ->findAll(),
+                'daftar_gatuk' => $this->GatukModel->orderBy('id_gatuk', 'DESC')
+                    ->join('rekening', 'rekening.id_rekening = gatuk.id_rekening', 'left')
+                    ->join('rpt', 'rpt.invoice = gatuk.invoice', 'left')
+                    ->select('gatuk.*, rekening.*, rpt.nama, rpt.alamat')
+                    ->where('DATE(gatuk.tanggal) =', $tanggal)
+                    ->findAll(),
+                'jumlahtotal' => $jumlahtotal,
+            ];
+            // var_dump($data);
+            return view('admin/gatuk/laporan', $data);
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada pembayaran pada tanggal tersebut');
         }
     }
 }

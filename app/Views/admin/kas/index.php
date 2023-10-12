@@ -331,7 +331,7 @@
     // Fungsi untuk membuat combobox searchable
     $(document).ready(function() {
         $("#id_select").select2({
-            placeholder: "-- Pilih Kategori --",
+            placeholder: "-- Pilih --",
             allowClear: true,
         });
     });

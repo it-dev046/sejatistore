@@ -11,7 +11,7 @@ class RPTController extends BaseController
         $data = [
             'title' => 'Rancangan Pembayaran',
             'userId' => $this->session->get('id'),
-            'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
+            'daftar_rpt' => $this->RPTModel->orderBy('tanggal', 'DESC')->findAll(),
             'daftar_hbk' => $this->HbkModel->orderBy('id_hbk', 'DESC')
                 ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'left')
                 ->where('sisa_hbk >', 0)

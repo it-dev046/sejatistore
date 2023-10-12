@@ -12,6 +12,7 @@ class InvoiceController extends BaseController
             'daftar_pasang' => $this->PasangModel
                 ->join('survei', 'survei.id_survei = pemasangan.id_survei', 'left')
                 ->orderBy('id_pasang', 'DESC')
+                ->select('pemasangan.*, survei.drafter, survei.pengukur')
                 ->findAll()
         ];
 

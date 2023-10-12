@@ -7,9 +7,14 @@ class RekeningController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Halaman Daftar Rekening Perusahaan',
+            'title' => 'Halaman Daftar Rekening',
             'userId' => $this->session->get('id'),
             'daftar_rekening' => $this->RekeningModel->orderBy('id_rekening', 'DESC')->findAll(),
+            'daftar_usaha' => $this->RekeningModel
+                ->orderBy('usaha', 'ASC')
+                ->distinct()
+                ->select('usaha')
+                ->findAll(),
         ];
 
         return view('admin/rekening/index', $data);
@@ -70,5 +75,20 @@ class RekeningController extends BaseController
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
         }
+    }
+
+    public function uraian()
+    {
+        $usaha = $this->request->getPost('usaha');
+        $data = [
+            'title' => 'Halaman Detail Rekening',
+            'userId' => $this->session->get('id'),
+            'daftar_rekening' => $this->RekeningModel
+                ->where('usaha =', $usaha)
+                ->findAll(),
+        ];
+        // var_dump($data);
+
+        echo view('admin/rekening/uraian', $data);
     }
 }

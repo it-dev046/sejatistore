@@ -6,7 +6,7 @@
             <h1 class="mt-4"> <?= $title; ?> </h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href=" <?= base_url('dashboard-admin') ?> ">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href=" <?= base_url('bulanan') ?> ">Daftar Pembayaran Pembayaran Bulanan Perusahaan</a></li>
+                <li class="breadcrumb-item"><a href=" <?= base_url('bulanan') ?> ">Daftar Pembayaran Pemakaian</a></li>
                 <li class="breadcrumb-item active"> <?= $title; ?> </li>
             </ol>
             <div class="card mb-4">
@@ -14,7 +14,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Daftar Pembayaran Pembayaran Bulanan Perusahaan
+                            Daftar Pembayaran Bulanan 
                         </div>
                         <div class="card-body">
                             <!-- Notifi Berhasil -->

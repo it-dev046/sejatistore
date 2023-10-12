@@ -34,15 +34,19 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-4">
                                         <label for="nilai">
-                                            <h6>Nama karyawan</h6>
+                                            <h6>Nama & Nilai Kasbon</h6>
                                         </label>
-                                        <select name="id_karyawan" id="id_karyawan" class="form-control" required>
+                                        <select name="id_karyawan" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_karyawan as $key => $karyawan) { ?>
-                                                <option value="<?= $karyawan->id_karyawan ?>"><?= $karyawan->nama ?> (<?= $karyawan->posisi ?>)</option>
+                                                <option value="<?= $karyawan->id_karyawan ?>"><?= $karyawan->nama ?> -> <?= $karyawan->posisi ?>
+                                                    <?php if (!empty($karyawan->sisa)) { ?>(
+                                                    <?= number_to_currency($karyawan->sisa, 'IDR', 'id_ID',) ?>
+                                                    ) <?php } ?>
+                                                </option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -115,12 +119,9 @@
                                                     0
                                                 <?php } ?>
                                             </td>
-                                            <td> <?= $value->rekening; ?> <br> (<?= $value->bank; ?>) </td>
+                                            <td> <?= $value->AN; ?> <br> <?= $value->rek; ?> <br> (<?= $value->bank; ?>) </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id_ins; ?>">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $value->id_ins; ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
@@ -137,115 +138,82 @@
     </main>
 
     <?php foreach ($daftar_ins as $ins) : ?>
-        <div class="modal fade" id="ubahModal<?= $ins->id_ins; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="hapusModal<?= $ins->id_ins; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header bg-success text-white">
-                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Ubah insentif</h5>
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus insentif</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action=" <?= base_url('ins/ubah/' . $ins->id_ins) ?>" method="post">
+                        <form action=" <?= base_url('ins/hapus/' . $ins->id_ins) ?>" method="post">
                             <?= csrf_field() ?>
                             <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
-                            <input type="number" name="id_karyawan" id="id_karyawan" class="form-control" value="<?= $ins->id_karyawan; ?>" hidden>
-                            <input type="date" name="tanggal" id="tanggal" class="form-control" value="<?= $ins->tanggal; ?>" hidden>
-                            <input type="hidden" name="_method" value="PUT">
-                            <div class="mb-3">
-                                <label for="potongan">
-                                    <h6>Potongan</h6>
-                                </label>
-                                <input type="number" name="potongan" id="potongan" class="form-control" value="<?= $ins->potongan; ?>" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="keterangan">
-                                    <h6>Keterangan</h6>
-                                </label>
-                                <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="3" required><?= $ins->keterangan; ?></textarea>
-                            </div>
+                            <input type="hidden" name="_method" value="DELETE">
+                            <p>
+                            <table class="table table-borderless table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" scope="row">Yakin insentif Karyawan</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="100px">Tanggal</td>
+                                        <td> : <strong><?= date('d F Y', strtotime($ins->tanggal)) ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="150px">Nama</td>
+                                        <td> : <strong><?= $ins->nama ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="150px">Rekening</td>
+                                        <td> : <strong><?= $ins->rek ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="150px">Bank</td>
+                                        <td> : <strong><?= $ins->bank ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="150px">Total Insentif</td>
+                                        <td> : <strong><?= number_to_currency($value->total, 'IDR', 'id_ID',) ?></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success btn-sm">Ubah</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                     </div>
                     </form>
                 </div>
             </div>
         </div>
-</div>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 
-<?php foreach ($daftar_ins as $ins) : ?>
-    <div class="modal fade" id="hapusModal<?= $ins->id_ins; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus insentif</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action=" <?= base_url('ins/hapus/' . $ins->id_ins) ?>" method="post">
-                        <?= csrf_field() ?>
-                        <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
-                        <input type="hidden" name="_method" value="DELETE">
-                        <p>
-                        <table class="table table-borderless table-sm">
-                            <tbody>
-                                <tr>
-                                    <td colspan="2" scope="row">Yakin insentif Karyawan</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="100px">Tanggal</td>
-                                    <td> : <strong><?= date('d F Y', strtotime($ins->tanggal)) ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Nama</td>
-                                    <td> : <strong><?= $ins->nama ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Rekening</td>
-                                    <td> : <strong><?= $ins->rekening ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Bank</td>
-                                    <td> : <strong><?= $ins->bank ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Total Insentif</td>
-                                    <td> : <strong><?= number_to_currency($value->total, 'IDR', 'id_ID',) ?></strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    </div>
-<?php endforeach; ?>
-
-<?= $this->endSection() ?>
-<?= $this->Section('script') ?>
-<script type="text/javascript">
-    $(document).ready(function() {
-        var table = $('#table').DataTable({
-            buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],
-            dom: "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
-                "<'row'<'col-md-12'tr>>" +
-                "<'row'<'col-md-5'i><'col-md-7'p>>",
-            lengthMenu: [
-                [5, 10, 25, 50, 100, -1],
-                [5, 10, 25, 50, 100, "All"]
-            ]
+    <?= $this->endSection() ?>
+    <?= $this->Section('script') ?>
+    <script type="text/javascript">
+        // Fungsi untuk membuat combobox searchable
+        $(document).ready(function() {
+            $("#id_select").select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+            });
         });
+        $(document).ready(function() {
+            var table = $('#table').DataTable({
+                buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],
+                dom: "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
+                    "<'row'<'col-md-12'tr>>" +
+                    "<'row'<'col-md-5'i><'col-md-7'p>>",
+                lengthMenu: [
+                    [5, 10, 25, 50, 100, -1],
+                    [5, 10, 25, 50, 100, "All"]
+                ]
+            });
 
-        table.buttons().container()
-            .appendTo('#table_wrapper .col-md-5:eq(0)');
-    });
-</script>
-<?= $this->endSection() ?>
+            table.buttons().container()
+                .appendTo('#table_wrapper .col-md-5:eq(0)');
+        });
+    </script>
+    <?= $this->endSection() ?>

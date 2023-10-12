@@ -9,7 +9,10 @@ class KaryawanController extends BaseController
         $data = [
             'title' => 'Halaman karyawan',
             'userId' => $this->session->get('id'),
-            'daftar_karyawan' => $this->KaryawanModel->orderBy('id_karyawan', 'DESC')->findAll(),
+            'daftar_karyawan' => $this->KaryawanModel->orderBy('id_karyawan', 'DESC')
+                ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')->findAll(),
+            'daftar_posisi' => $this->PosisiModel->orderBy('nama', 'ASC')->findAll(),
+            'daftar_rekening' => $this->RekeningModel->orderBy('AN', 'ASC')->findAll(),
         ];
 
         return view('admin/karyawan/index', $data);
@@ -31,8 +34,7 @@ class KaryawanController extends BaseController
                 'um' => esc($this->request->getPost('um')),
                 'op' => esc($this->request->getPost('op')),
                 'bonus' => esc($this->request->getPost('bonus')),
-                'rekening' => esc($this->request->getPost('rekening')),
-                'bank' => esc($this->request->getPost('bank')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'posisi' => esc($this->request->getPost('posisi')),
             ];
             $this->KaryawanModel->insert($data);
@@ -52,10 +54,10 @@ class KaryawanController extends BaseController
             //simpan data ke database
             $data = [
                 'nama' => esc($this->request->getPost('nama')),
+                'tanggal' => esc($this->request->getPost('tanggal')),
                 'alamat' => esc($this->request->getPost('alamat')),
                 'ktp' => esc($this->request->getPost('ktp')),
-                'rekening' => esc($this->request->getPost('rekening')),
-                'bank' => esc($this->request->getPost('bank')),
+                'id_rekening' => esc($this->request->getPost('id_rekening')),
                 'posisi' => esc($this->request->getPost('posisi')),
                 'gapok' => esc($this->request->getPost('gapok')),
                 'um' => esc($this->request->getPost('um')),

@@ -9,9 +9,13 @@ class bulananController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Halaman Daftar Bulanan Perusahaan',
+            'title' => 'Halaman Pemakaian Bulanan',
             'userId' => $this->session->get('id'),
             'daftar_bulanan' => $this->BulananModel->orderBy('id_bulanan', 'DESC')
+                ->findAll(),
+            'daftar_uraian' => $this->DetailBulananModel
+                ->join('bulanan', 'bulanan.id_bulanan = detail_bulanan.id_bulanan', 'left')
+                ->orderBy('tanggal', 'DESC')
                 ->findAll(),
         ];
 
@@ -27,7 +31,6 @@ class bulananController extends BaseController
 
             //simpan data database
             $data = [
-                'tempo' => esc($this->request->getPost('tempo')),
                 'nama' => esc($this->request->getPost('nama')),
                 'nomor' => esc($this->request->getPost('nomor')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
@@ -48,7 +51,6 @@ class bulananController extends BaseController
         if ($userId == $cekid) {
             //simpan data database
             $data = [
-                'tempo' => esc($this->request->getPost('tempo')),
                 'nama' => esc($this->request->getPost('nama')),
                 'nomor' => esc($this->request->getPost('nomor')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
@@ -79,7 +81,7 @@ class bulananController extends BaseController
     public function uraian($id_bulanan)
     {
         $data = [
-            'title' => 'Halaman Detail bulanan',
+            'title' => 'Halaman Detail Pemakaian',
             'bulanan' => $this->BulananModel
                 ->where('id_bulanan', $id_bulanan)
                 ->first(),
@@ -123,5 +125,30 @@ class bulananController extends BaseController
         $this->DetailBulananModel->where('id', $id)->delete();
 
         return redirect()->back()->with('success', 'Data Uraian Data bulanan Berhasil dihapus');
+    }
+
+
+    public function laporan()
+    {
+        $tanggal = $this->request->getPost('tanggal');
+        $cek = $this->DetailBulananModel->cek($tanggal);
+
+        if (!empty($cek)) {
+            $jumlahnilai = $this->DetailBulananModel->jumlahnilai($tanggal);
+
+            $data = [
+                'title' => 'Laporan Pemakaian Bulanan',
+                'tanggal' => $tanggal,
+                'daftar_bulanan' => $this->DetailBulananModel->orderBy('id', 'DESC')
+                    ->join('bulanan', 'bulanan.id_bulanan = detail_bulanan.id_bulanan', 'left')
+                    ->where('DATE(tanggal) =', $tanggal)
+                    ->findAll(),
+                'jumlahtotal' => $jumlahnilai,
+            ];
+            // var_dump($data);
+            return view('admin/bulanan/laporan', $data);
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada Pembayaran pada tanggal tersebut');
+        }
     }
 }

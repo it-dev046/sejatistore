@@ -11,9 +11,14 @@ class GajiController extends BaseController
             'userId' => $this->session->get('id'),
             'daftar_gaji' => $this->GajiModel
                 ->join('karyawan', 'karyawan.id_karyawan = gaji.id_karyawan', 'left')
-                ->select('gaji.*, karyawan.gapok, karyawan.bonus, karyawan.rekening, karyawan.bank, karyawan.nama')
-                ->orderBy('id_gaji', 'DESC')->findAll(),
-            'daftar_karyawan' => $this->KaryawanModel->orderBy('id_karyawan', 'DESC')->findAll(),
+                ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
+                ->select('gaji.*, karyawan.gapok, karyawan.bonus, rekening.AN, rekening.rek, rekening.bank, karyawan.nama')
+                ->orderBy('tanggal', 'DESC')->findAll(),
+            'daftar_karyawan' => $this->KaryawanModel->orderBy('nama', 'ASC')
+                ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
+                ->join('kasbon', 'kasbon.id_rekening = rekening.id_rekening', 'left')
+                ->select('karyawan.*, rekening.*, kasbon.sisa')
+                ->findAll(),
         ];
 
         return view('admin/gaji/index', $data);
@@ -26,8 +31,21 @@ class GajiController extends BaseController
 
         if ($userId == $cekid) {
             $id_karyawan = $this->request->getPost('id_karyawan');
+            $karyawan =  $this->KaryawanModel->orderBy('id_karyawan', 'DESC')
+                ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
+                ->where('id_karyawan', $id_karyawan)->first();
+            $cek = $this->KasbonModel->isInvoiceExists($karyawan->id_rekening);
             $potongan = $this->request->getPost('potongan');
-            $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
+            if ($cek) {
+                $kasbon = $this->KasbonModel->orderBy('id_kasbon', 'ASC')
+                    ->where('id_rekening', $karyawan->id_rekening)
+                    ->first();
+                $sisakasbon = $kasbon->sisa - $potongan;
+                $data = [
+                    'sisa' => $sisakasbon,
+                ];
+                $this->KasbonModel->update($kasbon->id_kasbon, $data);
+            }
 
             $tanggal = $this->request->getPost('tanggal');
             $dateParts = date_parse($tanggal);
@@ -57,37 +75,30 @@ class GajiController extends BaseController
         }
     }
 
-    public function update($id_gaji)
-    {
-        $cekid = $this->session->get('id');
-        $userId = $this->request->getPost('userId');
-
-        if ($userId == $cekid) {
-            $id_karyawan = $this->request->getPost('id_karyawan');
-            $potongan = $this->request->getPost('potongan');
-            $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
-
-            $total = $karyawan->gapok + $karyawan->bonus - $potongan;
-            //simpan data database
-            $data = [
-                'keterangan' => esc($this->request->getPost('keterangan')),
-                'potongan' => $potongan,
-                'total' => $total,
-            ];
-            $this->GajiModel->update($id_gaji, $data);
-
-            return redirect()->back()->with('success', 'Data Gaji Berhasil Diubah');
-        } else {
-            return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
-        }
-    }
-
     public function destroy($id_gaji)
     {
         $cekid = $this->session->get('id');
         $userId = $this->request->getPost('userId');
 
         if ($userId == $cekid) {
+            $gaji = $this->GajiModel->orderBy('id_gaji', 'DESC')
+                ->join('karyawan', 'karyawan.id_karyawan = gaji.id_karyawan', 'left')
+                ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
+                ->select('gaji.potongan, rekening.id_rekening')
+                ->where('id_gaji', $id_gaji)->first();
+            $id_rekening = $gaji->id_rekening;
+            $potongan = $gaji->potongan;
+            $cek = $this->KasbonModel->isInvoiceExists($id_rekening);
+            if ($cek) {
+                $kasbon = $this->KasbonModel->orderBy('id_kasbon', 'ASC')
+                    ->where('id_rekening', $id_rekening)
+                    ->first();
+                $sisakasbon = $kasbon->sisa + $potongan;
+                $data = [
+                    'sisa' => $sisakasbon,
+                ];
+                $this->KasbonModel->update($kasbon->id_kasbon, $data);
+            }
             // Hapus data
             $this->GajiModel->where('id_gaji', $id_gaji)->delete();
 

@@ -36,18 +36,19 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'BerandaController::index');
 $routes->get('cetak/stok', 'CetakController::daftarstok');
+$routes->get('orderan', 'CetakController::daftarorder');
+$routes->get('order/nota/gambar/(:num)', 'OrderController::unduhnota/$1');
+$routes->get('order/bukti/gambar/(:num)', 'OrderController::unduhbukti/$1');
 
 $routes->group('register', function ($routes) {
     $routes->get('/', 'RegisterController::index');
     $routes->post('/', 'RegisterController::store');
 });
 
-if (empty($status)) {
-    $routes->group('login', function ($routes) {
-        $routes->get('/', 'LoginController::index');
-        $routes->post('/', 'LoginController::login');
-    });
-}
+$routes->group('login', function ($routes) {
+    $routes->get('/', 'LoginController::index');
+    $routes->post('/', 'LoginController::login');
+});
 
 $routes->group('logout', function ($routes) {
     $routes->get('/', 'LogoutController::index');
@@ -216,6 +217,9 @@ if ($level == "1") {
     $routes->put('order/uraian/ubah/(:num)', 'OrderController::updateuraian/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('order/uraian/hapus/(:num)', 'OrderController::uraianhapus/$1', ['filter' => 'isLoggedIn']);
     $routes->get('order/uraian/batal/(:num)', 'OrderController::uraianbatal/$1', ['filter' => 'isLoggedIn']);
+
+    $routes->get('user/password', 'UserController::password', ['filter' => 'isLoggedIn']);
+    $routes->post('user/password/ubah', 'UserController::changePassword', ['filter' => 'isLoggedIn']);
 } elseif ($level == "3") {
 
     $routes->get('dashboard-drafter', 'Dashboard::drafter', ['filter' => 'isLoggedIn']);
@@ -308,6 +312,9 @@ if ($level == "1") {
     $routes->get('order/uraian/batal/(:num)', 'OrderController::uraianbatal/$1', ['filter' => 'isLoggedIn']);
     $routes->get('order/nota/gambar/(:num)', 'OrderController::unduhnota/$1', ['filter' => 'isLoggedIn']);
     $routes->get('order/bukti/gambar/(:num)', 'OrderController::unduhbukti/$1', ['filter' => 'isLoggedIn']);
+
+    $routes->get('user/password', 'UserController::password', ['filter' => 'isLoggedIn']);
+    $routes->post('user/password/ubah', 'UserController::changePassword', ['filter' => 'isLoggedIn']);
 } else {
 
     $routes->get('/dashboard-admin', 'Dashboard::admin', ['filter' => 'isLoggedIn']);
@@ -411,6 +418,9 @@ if ($level == "1") {
     $routes->post('karyawan/tambah', 'KaryawanController::store', ['filter' => 'isLoggedIn']);
     $routes->put('karyawan/ubah/(:num)', 'KaryawanController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('karyawan/hapus/(:num)', 'KaryawanController::destroy/$1', ['filter' => 'isLoggedIn']);
+    $routes->post('karyawan/posisi/tambah', 'PosisiController::store', ['filter' => 'isLoggedIn']);
+    $routes->put('karyawan/posisi/ubah/(:num)', 'PosisiController::update/$1', ['filter' => 'isLoggedIn']);
+    $routes->delete('karyawan/posisi/hapus/(:num)', 'PosisiController::destroy/$1', ['filter' => 'isLoggedIn']);
 
     $routes->get('absen', 'AbsenController::index', ['filter' => 'isLoggedIn']);
     $routes->post('absen/tambah', 'AbsenController::store', ['filter' => 'isLoggedIn']);
@@ -445,6 +455,7 @@ if ($level == "1") {
     $routes->post('gatuk/tambah', 'GatukController::store', ['filter' => 'isLoggedIn']);
     $routes->put('gatuk/ubah/(:num)', 'GatukController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('gatuk/hapus/(:num)', 'GatukController::destroy/$1', ['filter' => 'isLoggedIn']);
+    $routes->post('gatuk/laporan/preview', 'GatukController::laporan', ['filter' => 'isLoggedIn']);
 
     $routes->get('deposit', 'DepositController::index', ['filter' => 'isLoggedIn']);
     $routes->post('deposit/tambah', 'DepositController::store', ['filter' => 'isLoggedIn']);
@@ -466,6 +477,8 @@ if ($level == "1") {
     $routes->post('rekening/tambah', 'RekeningController::store', ['filter' => 'isLoggedIn']);
     $routes->put('rekening/ubah/(:num)', 'RekeningController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('rekening/hapus/(:num)', 'RekeningController::destroy/$1', ['filter' => 'isLoggedIn']);
+    $routes->post('rekening/uraian', 'RekeningController::uraian', ['filter' => 'isLoggedIn']);
+    $routes->get('rekening/uraian', 'RekeningController::index', ['filter' => 'isLoggedIn']);
 
     $routes->get('hutang', 'HutangController::index', ['filter' => 'isLoggedIn']);
     $routes->post('hutang/tambah', 'HutangController::store', ['filter' => 'isLoggedIn']);
@@ -488,6 +501,7 @@ if ($level == "1") {
     $routes->put('bulanan/uraian/ubah/(:num)', 'BulananController::updateuraian/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('bulanan/uraian/hapus/(:num)', 'BulananController::uraianhapus/$1', ['filter' => 'isLoggedIn']);
     $routes->get('bulanan/uraian/batal/(:num)', 'BulananController::uraianbatal/$1', ['filter' => 'isLoggedIn']);
+    $routes->post('bulanan/laporan/preview', 'BulananController::laporan', ['filter' => 'isLoggedIn']);
 
     $routes->get('memo', 'MemoController::index', ['filter' => 'isLoggedIn']);
     $routes->post('memo/tambah', 'MemoController::store', ['filter' => 'isLoggedIn']);
@@ -499,6 +513,7 @@ if ($level == "1") {
     $routes->post('pengajuan/tambah', 'PengajuanController::store', ['filter' => 'isLoggedIn']);
     $routes->put('pengajuan/ubah/(:num)', 'PengajuanController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('pengajuan/hapus/(:num)', 'PengajuanController::destroy/$1', ['filter' => 'isLoggedIn']);
+    $routes->post('pengajuan/laporan/preview', 'PengajuanController::laporan', ['filter' => 'isLoggedIn']);
 
     $routes->get('cetak/(:segment)/nota', 'CetakController::nota/$1', ['filter' => 'isLoggedIn']);
     $routes->get('cetak/(:segment)/suratjalan', 'CetakController::suratjalan/$1', ['filter' => 'isLoggedIn']);
@@ -507,6 +522,9 @@ if ($level == "1") {
     $routes->post('toko/tambah', 'TokoController::store', ['filter' => 'isLoggedIn']);
     $routes->put('toko/ubah/(:num)', 'TokoController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('toko/hapus/(:num)', 'TokoController::destroy/$1', ['filter' => 'isLoggedIn']);
+
+    $routes->get('user/password', 'UserController::password', ['filter' => 'isLoggedIn']);
+    $routes->post('user/password/ubah', 'UserController::changePassword', ['filter' => 'isLoggedIn']);
 }
 
 /*

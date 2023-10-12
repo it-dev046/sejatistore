@@ -34,11 +34,11 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-7">
+                                    <div class="mb-3 col-8">
                                         <label for="nilai">
                                             <h6>Pilih Costumer</h6>
                                         </label>
-                                        <select name="nama" id="nama" class="form-control" required>
+                                        <select name="nama" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_pel as $key => $pel) { ?>
@@ -195,6 +195,13 @@
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
+    // Fungsi untuk membuat combobox searchable
+    $(document).ready(function() {
+        $("#id_select").select2({
+            placeholder: "-- Pilih --",
+            allowClear: true,
+        });
+    });
     $(document).ready(function() {
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

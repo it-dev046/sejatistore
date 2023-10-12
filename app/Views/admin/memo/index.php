@@ -34,7 +34,7 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-3">
                                         <label for="nama">
                                             <h6>Nama Supir</h6>
                                         </label>
@@ -52,13 +52,13 @@
                                         </label>
                                         <input type="text" name="nomor" id="nomor" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-3">
                                         <label for="barang">
                                             <h6>Pengambilan</h6>
                                         </label>
                                         <textarea name="barang" id="barang" class="form-control" cols="30" rows="3" required></textarea>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-4">
                                         <label for="alamat">
                                             <h6>Alamat</h6>
                                         </label>

@@ -13,7 +13,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Daftar Penggajian Karyawan
+                            Daftar Gaji Karyawan
                         </div>
                         <div class="card-body">
 
@@ -34,15 +34,19 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-4">
                                         <label for="nilai">
-                                            <h6>Nama karyawan</h6>
+                                            <h6>Nama & Nilai Kasbon</h6>
                                         </label>
-                                        <select name="id_karyawan" id="id_karyawan" class="form-control" required>
+                                        <select name="id_karyawan" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_karyawan as $key => $karyawan) { ?>
-                                                <option value="<?= $karyawan->id_karyawan ?>"><?= $karyawan->nama ?> (<?= $karyawan->posisi ?>)</option>
+                                                <option value="<?= $karyawan->id_karyawan ?>"><?= $karyawan->nama ?> -> <?= $karyawan->posisi ?>
+                                                    <?php if (!empty($karyawan->sisa)) { ?>(
+                                                    <?= number_to_currency($karyawan->sisa, 'IDR', 'id_ID',) ?>
+                                                    ) <?php } ?>
+                                                </option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -115,12 +119,9 @@
                                                     0
                                                 <?php } ?>
                                             </td>
-                                            <td> <?= $value->rekening; ?> (<?= $value->bank; ?>) </td>
+                                            <td> <?= $value->AN; ?> <br> <?= $value->rek; ?> <br> <?= $value->bank; ?> </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id_gaji; ?>">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $value->id_gaji; ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
@@ -203,7 +204,7 @@
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Rekening</td>
-                                    <td> : <strong><?= $gaji->rekening ?></strong></td>
+                                    <td> : <strong><?= $gaji->rek ?></strong></td>
                                 </tr>
                                 <tr>
                                     <td scope="row" width="150px">Bank</td>
@@ -227,6 +228,13 @@
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
+    // Fungsi untuk membuat combobox searchable
+    $(document).ready(function() {
+        $("#id_select").select2({
+            placeholder: "-- Pilih --",
+            allowClear: true,
+        });
+    });
     $(document).ready(function() {
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

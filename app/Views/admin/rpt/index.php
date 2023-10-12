@@ -38,7 +38,7 @@
                                         <label for="nilai">
                                             <h6>Pilih Invoice</h6>
                                         </label>
-                                        <select name="id_hbk" id="id_hbk" class="form-control" required>
+                                        <select name="id_hbk" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_hbk as $key => $hbk) { ?>
@@ -65,7 +65,7 @@
                                         <th>Tanggal</th>
                                         <th>Invoice</th>
                                         <th>Nama</th>
-                                        <th>Perkerja</th>
+                                        <th>Pekerja</th>
                                         <th>Sisa HBK</th>
                                         <th>Pembayaran</th>
                                         <th>Keterangan</th>
@@ -195,6 +195,13 @@
 <?= $this->Section('script') ?>
 <script type="text/javascript">
     $(document).ready(function() {
+        // Fungsi untuk membuat combobox searchable
+        $(document).ready(function() {
+            $("#id_select").select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+            });
+        });
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],
             dom: "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +

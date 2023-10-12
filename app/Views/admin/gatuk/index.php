@@ -24,6 +24,13 @@
                                 </div>
                             <?php endif; ?>
 
+                            <!-- Notifikasi Berhasil -->
+                            <?php if (session('error')) : ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session('error'); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <form action="<?= base_url('gatuk/tambah') ?>" method="post">
                                 <?= csrf_field() ?>
                                 <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
@@ -38,7 +45,7 @@
                                         <label for="nilai">
                                             <h6>Rancangan Pembayaran</h6>
                                         </label>
-                                        <select name="id_rpt" id="id_rpt" class="form-control" required>
+                                        <select name="id_rpt" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_rpt as $key => $daftar_rpt) { ?>
@@ -57,7 +64,7 @@
                                         <label for="nama">
                                             <h6>Nama & Nilai Kasbon</h6>
                                         </label>
-                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                        <select name="id_rekening" id="id_select2" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_rekening as $key => $rekening) { ?>
@@ -87,16 +94,33 @@
                                     </div>
                                 </div>
                             </form>
+                            <form action="<?= base_url('gatuk/laporan/preview') ?>" method="post">
+                                <div class="row">
+                                    <div class="mb-3 col-2">
+                                        <label for="tgl_awal">
+                                            <h6>Tanggal Laporan</h6>
+                                        </label>
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3 col-2 mt-2">
+                                        <label for="keterangan">
+                                            <h6> </h6>
+                                        </label><br>
+                                        <button type="submit" class="btn btn-warning btn-sm"><strong>Cari</strong></button>
+                                    </div>
+                                </div>
+                            </form>
                             <hr>
-
                             <table id="table" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>Tanggal</th>
                                         <th>Invoice</th>
+                                        <th>Pekerjaan</th>
                                         <th>Penerima</th>
-                                        <th>Sisa</th>
                                         <th>Pembayaran</th>
+                                        <th>Sisa</th>
                                         <th>Keterangan</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -108,13 +132,28 @@
                                     ?>
                                         <!-- html... -->
                                         <tr>
+                                            <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($value->tanggal)) ?></td>
                                             <td> <?= $value->invoice; ?> </td>
+                                            <td>
+                                                <?= $value->tukang; ?> <br>
+                                                (<?= $value->nama; ?> - <?= $value->alamat; ?>) <br>
+                                            </td>
                                             <td> <?= $value->usaha; ?> <br> <?= $value->AN; ?> <br> <?= $value->rek; ?> <br> ( <?= $value->bank; ?> ) </td>
-                                            <td> <?= number_to_currency($value->sisa_hbk, 'IDR', 'id_ID',) ?></td>
-                                            <td> <?= number_to_currency($bayar, 'IDR', 'id_ID',) ?></td>
-                                            <?php ?>
-                                            <?php ?>
+                                            <td>
+                                                <?php if (!empty($bayar)) { ?>
+                                                    <?= number_to_currency($bayar, 'IDR', 'id_ID') ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($value->sisa_hbk)) { ?>
+                                                    <?= number_to_currency($value->sisa_hbk, 'IDR', 'id_ID') ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $value->id_gatuk; ?>">
@@ -161,7 +200,13 @@
                                     </tr>
                                     <tr>
                                         <td scope="row" width="150px">Nominal</td>
-                                        <td> : <strong><?= number_to_currency($gatuk->nilai, 'IDR', 'id_ID',) ?></strong></td>
+                                        <td> : <strong>
+                                                <?php if (!empty($value->nilai)) { ?>
+                                                    (<?= number_to_currency($value->nilai, 'IDR', 'id_ID', 2) ?>)
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </strong></td>
                                     </tr>
                                     <tr>
                                         <td scope="row" width="150px">Keterangan</td>
@@ -184,6 +229,20 @@
     <?= $this->endSection() ?>
     <?= $this->Section('script') ?>
     <script type="text/javascript">
+        // Fungsi untuk membuat combobox searchable
+        $(document).ready(function() {
+            $("#id_select").select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+            });
+        });
+        // Fungsi untuk membuat combobox searchable
+        $(document).ready(function() {
+            $("#id_select2").select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+            });
+        });
         $(document).ready(function() {
             var table = $('#table').DataTable({
                 buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

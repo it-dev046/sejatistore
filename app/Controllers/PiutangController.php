@@ -11,9 +11,13 @@ class PiutangController extends BaseController
         $data = [
             'title' => 'Halaman Piutang',
             'userId' => $this->session->get('id'),
-            'daftar_piutang' => $this->PiutangModel->orderBy('id_piutang', 'DESC')
+            'daftar_piutang' => $this->PiutangModel->orderBy('tanggal', 'DESC')
                 ->join('rekening', 'rekening.id_rekening = piutang.id_rekening', 'left')->findAll(),
-            'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
+            'daftar_rekening' => $this->RekeningModel
+                ->orderBy('usaha', 'ASC')
+                ->distinct()
+                ->select('usaha')
+                ->findAll(),
         ];
 
         return view('admin/piutang/index', $data);
@@ -25,11 +29,16 @@ class PiutangController extends BaseController
         $userId = $this->request->getPost('userId');
 
         if ($userId == $cekid) {
+            $usaha = $this->request->getPost('usaha');
+            $rekening = $this->RekeningModel
+                ->orderBy('usaha', 'ASC')
+                ->where('usaha =', $usaha)
+                ->first();
 
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'id_rekening' => esc($this->request->getPost('id_rekening')),
+                'id_rekening' => $rekening->id_rekening,
                 'alamat' => esc($this->request->getPost('alamat')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'saldo' => 0,
@@ -78,10 +87,12 @@ class PiutangController extends BaseController
         }
     }
 
-
     public function uraian($id_piutang)
     {
-        $piutang = $this->PiutangModel->where('id_piutang', $id_piutang)->first();
+        $piutang = $this->PiutangModel
+            ->join('rekening', 'rekening.id_rekening = piutang.id_rekening', 'left')
+            ->where('id_piutang', $id_piutang)
+            ->first();
         $data = [
             'title' => 'Halaman Detail Piutang',
             'piutang' => $this->PiutangModel->where('id_piutang', $id_piutang)
@@ -90,6 +101,9 @@ class PiutangController extends BaseController
             'daftar_uraian' => $this->DetailPiutangModel
                 ->where('id_piutang', $piutang->id_piutang)
                 ->orderBy('tanggal', 'DESC')
+                ->findAll(),
+            'daftar_rekening' => $this->RekeningModel
+                ->where('usaha =', $piutang->usaha)
                 ->findAll(),
             'jumlahdebet' => $this->DetailPiutangModel->jumlahdebet($id_piutang),
             'jumlahkredit' => $this->DetailPiutangModel->jumlahkredit($id_piutang),

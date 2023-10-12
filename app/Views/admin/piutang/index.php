@@ -38,11 +38,11 @@
                                         <label for="nama">
                                             <h6>Nama</h6>
                                         </label>
-                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                        <select name="usaha" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_rekening as $key => $rekening) { ?>
-                                                <option value="<?= $rekening->id_rekening ?>"><?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
+                                                <option value="<?= $rekening->usaha ?>"><?= $rekening->usaha ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -123,11 +123,10 @@
                                 <label for="nama">
                                     <h6>Nama</h6>
                                 </label>
-                                <select name="id_rekening" id="id_rekening" class="form-control" required>
-                                    <?php foreach ($daftar_rekening as $a) : ?>
-                                        <option value="<?= $a->id_rekening; ?>" <?= $a->id_rekening == $piutang->id_rekening ? 'selected' : null ?>>
-                                            <?= $a->usaha; ?> (<?= $a->bank ?>)
-                                        </option>
+                                <select name="usaha" id="usaha" class="form-control" required>
+                                    <?php foreach ($daftar_rekening as $rekening) : ?>
+                                        <option value="<?= $rekening->usaha; ?>" <?= $piutang->usaha == $rekening->usaha ? 'selected' : null ?>>
+                                            <?= $rekening->usaha ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -208,6 +207,13 @@
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
+    // Fungsi untuk membuat combobox searchable
+    $(document).ready(function() {
+        $("#id_select").select2({
+            placeholder: "-- Pilih --",
+            allowClear: true,
+        });
+    });
     $(document).ready(function() {
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

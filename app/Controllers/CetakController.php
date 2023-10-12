@@ -687,6 +687,21 @@ class CetakController extends BaseController
         // var_dump($daftar_produk);
     }
 
+    public function daftarorder()
+    {
+
+        date_default_timezone_set("Asia/Manila");
+        $data = [
+            'title' => 'Order Barang ASN',
+            'tanggal' => date('d F Y'),
+            'daftar_order' => $this->OrderModel->orderBy('tanggal', 'DESC')->findAll(),
+            'daftar_uraian' => $this->DetailorderModel->orderBy('id_order', 'DESC')->findAll(),
+        ];
+
+        return view('admin/cetak/order', $data);
+        // var_dump($daftar_produk);
+    }
+
     public function invoice($id)
     {
 

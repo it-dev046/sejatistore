@@ -33,29 +33,34 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
+                                    <div class="mb-3 col-6">
+                                        <label for="nilai">
+                                            <h6>Sumber Kas</h6>
+                                        </label>
+                                        <select name="id_kas" id="id_select2" class="form-control" required>
+                                            <option value="" hidden>--Pilih--</option>
+                                            <!-- panggil data Sumber -->
+                                            <?php foreach ($daftar_kas as $key => $kas) { ?>
+                                                <option value="<?= $kas['id_kas'] ?>"><?= date('d M Y', strtotime($kas['tanggal'])) ?> / <?= $kas['sumber'] ?> / <?= $kas['uraian'] ?> /
+                                                    <?php if (!empty($kas['kredit'])) { ?>
+                                                        ( <?= number_to_currency($kas['kredit'], 'IDR', 'id_ID') ?> )
+                                                    <?php } else { ?>
+                                                        ( Rp. 0 )
+                                                    <?php } ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                     <div class="mb-3 col-4">
                                         <label for="sumber">
-                                            <h6>Sumber</h6>
+                                            <h6>Rekening</h6>
                                         </label>
-                                        <input type="text" name="sumber" id="sumber" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-4">
-                                        <label for="tujuan">
-                                            <h6>Tujuan</h6>
-                                        </label>
-                                        <input type="text" name="tujuan" id="tujuan" class="form-control" value="<?= $hutang->usaha ?> ( <?= $hutang->rek ?> )" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
-                                        <label for="bayar">
-                                            <h6>Nominal</h6>
-                                        </label>
-                                        <input type="number" name="bayar" id="bayar" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-3">
-                                        <label for="keterangan">
-                                            <h6>Keterangan</h6>
-                                        </label>
-                                        <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="3" required></textarea>
+                                        <select name="tujuan" id="id_select" class="form-control" required>
+                                            <option value="" hidden>--Pilih--</option>
+                                            <!-- panggil data Sumber -->
+                                            <?php foreach ($daftar_rekening as $key => $rekening) { ?>
+                                                <option value="<?= $rekening->AN ?> / <?= $rekening->rek ?> (<?= $rekening->bank ?>)"> <?= $rekening->AN ?> / <?= $rekening->rek ?> (<?= $rekening->bank ?>)</option>
+                                            <?php } ?>
+                                        </select>
                                     </div>
                                     <div class="mb-3 col-3 mt-5">
                                         <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
@@ -234,6 +239,18 @@
     <?= $this->Section('script') ?>
     <script type="text/javascript">
         // Fungsi untuk membuat combobox searchable
+        $(document).ready(function() {
+            $("#id_select").select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+            });
+        });
+        $(document).ready(function() {
+            $("#id_select2").select2({
+                placeholder: "-- Pilih --",
+                allowClear: true,
+            });
+        });
         $(document).ready(function() {
             var table = $('#table').DataTable({
                 buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

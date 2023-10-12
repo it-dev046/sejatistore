@@ -34,19 +34,17 @@
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
                                     <div class="mb-3 col-2">
-                                        <label for="uraian">
-                                            <h6>Uraian</h6>
-                                        </label>
-                                        <input type="text" name="keterangan" id="keterangan" class="form-control" required>
-                                    </div>
-                                    <div class="mb-3 col-2">
                                         <label for="nilai">
                                             <h6>Nominal</h6>
                                         </label>
                                         <input type="number" name="nilai" id="nilai" class="form-control" required>
                                     </div>
-
-                                    <div class="mb-3 col-2">
+                                    <div class="mb-3 col-3">
+                                        <label for="uraian">
+                                            <h6>Uraian</h6>
+                                        </label><textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="2" required></textarea>
+                                    </div>
+                                    <div class="mb-3 col-3">
                                         <label for="Keterangan">
                                             <h6>Jenis</h6>
                                         </label>
@@ -60,8 +58,14 @@
                                             <label class="form-check-label" for="inlineRadio2">Kredit</label>
                                         </div>
                                     </div>
+                                    <div class="mb-3 col-1 mt-2">
+                                        <label for="uraian">
+                                            <h6></h6>
+                                        </label>
+                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+
                             </form>
                             <hr>
                             <table id="table" class="table table-striped table-bordered">

@@ -1,3 +1,12 @@
+<?php
+
+date_default_timezone_set("Asia/Manila");
+
+use App\Models\DetailHutangModel;
+
+$this->DetailHutangModel = new DetailHutangModel();
+
+?>
 <?= $this->extend('admin/layout/template')  ?>
 <?= $this->Section('content');  ?>
 <div id="layoutSidenav_content">
@@ -38,11 +47,11 @@
                                         <label for="nilai">
                                             <h6>Nama Perusahaan</h6>
                                         </label>
-                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                        <select name="usaha" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_rekening as $key => $rekening) { ?>
-                                                <option value="<?= $rekening->id_rekening ?>"><?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
+                                                <option value="<?= $rekening->usaha ?>"><?= $rekening->usaha ?></option>
                                             <?php } ?>
                                         </select>
                                     </div>
@@ -79,7 +88,8 @@
                                         <th>Perusahaan</th>
                                         <th>Alamat</th>
                                         <th>Keterangan</th>
-                                        <th>Total Hutang</th>
+                                        <th>Total</th>
+                                        <th>Sisa Hutang</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -95,6 +105,13 @@
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td>
                                                 <?= number_to_currency($value->total, 'IDR', 'id_ID',) ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                $totalbayar = $this->DetailHutangModel->totalbayar($value->id_hutang);
+                                                $sisa = $value->total - $totalbayar;
+                                                ?>
+                                                <?= number_to_currency($sisa, 'IDR', 'id_ID',) ?>
                                             </td>
                                             <td class="text-canter">
                                                 <a href="<?= base_url('hutang/uraian/' . $value->id_hutang) ?>" class="btn btn-secondary btn-sm">
@@ -135,11 +152,11 @@
                                 <label for="nilai">
                                     <h6>Nama Perusahaan</h6>
                                 </label>
-                                <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                <select name="usaha" id="usaha" class="form-control" required>
                                     <!-- panggil data Sumber -->
                                     <?php foreach ($daftar_rekening as $rekening) : ?>
-                                        <option value="<?= $rekening->id_rekening; ?>" <?= $hutang->id_rekening == $rekening->id_rekening ? 'selected' : null ?>>
-                                            <?= $rekening->usaha ?> (<?= $rekening->bank ?>)</option>
+                                        <option value="<?= $rekening->usaha; ?>" <?= $hutang->usaha == $rekening->usaha ? 'selected' : null ?>>
+                                            <?= $rekening->usaha ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -226,6 +243,13 @@
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
+    // Fungsi untuk membuat combobox searchable
+    $(document).ready(function() {
+        $("#id_select").select2({
+            placeholder: "-- Pilih --",
+            allowClear: true,
+        });
+    });
     $(document).ready(function() {
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

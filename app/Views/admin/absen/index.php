@@ -38,7 +38,7 @@
                                         <label for="nilai">
                                             <h6>Nama karyawan</h6>
                                         </label>
-                                        <select name="nama" id="nama" class="form-control" required>
+                                        <select name="nama" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_karyawan as $key => $karyawan) { ?>
@@ -64,7 +64,6 @@
                                 </div>
                             </form>
                             <hr>
-
                             <table id="table" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -193,53 +192,53 @@
                 </div>
             </div>
         </div>
-</div>
-<?php endforeach; ?>
 
-<?php foreach ($daftar_absen as $absen) : ?>
-    <div class="modal fade" id="hapusModal<?= $absen->id_absen; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus absen</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <?php endforeach; ?>
+
+    <?php foreach ($daftar_absen as $absen) : ?>
+        <div class="modal fade" id="hapusModal<?= $absen->id_absen; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus absen</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action=" <?= base_url('absen/hapus/' . $absen->id_absen) ?>" method="post">
+                            <?= csrf_field() ?>
+                            <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
+                            <input type="hidden" name="_method" value="DELETE">
+                            <p>
+                            <table class="table table-borderless table-sm">
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" scope="row">Yakin Absen Karyawan</td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="100px">tanggal</td>
+                                        <td> : <strong><?= date('d F Y', strtotime($absen->tanggal)) ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="150px">Nama</td>
+                                        <td> : <strong><?= $absen->nama ?></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td scope="row" width="100px">Status</td>
+                                        <td> : <strong><?= $absen->status; ?></strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </div>
+                    </form>
                 </div>
-                <div class="modal-body">
-                    <form action=" <?= base_url('absen/hapus/' . $absen->id_absen) ?>" method="post">
-                        <?= csrf_field() ?>
-                        <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
-                        <input type="hidden" name="_method" value="DELETE">
-                        <p>
-                        <table class="table table-borderless table-sm">
-                            <tbody>
-                                <tr>
-                                    <td colspan="2" scope="row">Yakin Absen Karyawan</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="100px">tanggal</td>
-                                    <td> : <strong><?= date('d F Y', strtotime($absen->tanggal)) ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="150px">Nama</td>
-                                    <td> : <strong><?= $absen->nama ?></strong></td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" width="100px">Status</td>
-                                    <td> : <strong><?= $absen->status; ?></strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                </div>
-                </form>
             </div>
         </div>
-    </div>
-    </div>
+</div>
 <?php endforeach; ?>
 
 <?php foreach ($daftar_status as $status) : ?>
@@ -324,6 +323,13 @@
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
+    // Fungsi untuk membuat combobox searchable
+    $(document).ready(function() {
+        $("#id_select").select2({
+            placeholder: "-- Pilih Kategori --",
+            allowClear: true,
+        });
+    });
     $(document).ready(function() {
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

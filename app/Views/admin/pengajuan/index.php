@@ -24,6 +24,13 @@
                                 </div>
                             <?php endif; ?>
 
+                            <!-- Notifikasi Berhasil -->
+                            <?php if (session('error')) : ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session('error'); ?>
+                                </div>
+                            <?php endif; ?>
+
                             <form action="<?= base_url('pengajuan/tambah') ?>" method="post">
                                 <?= csrf_field() ?>
                                 <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
@@ -38,7 +45,7 @@
                                         <label for="nama">
                                             <h6>Nama</h6>
                                         </label>
-                                        <select name="id_rekening" id="id_rekening" class="form-control" required>
+                                        <select name="id_rekening" id="id_select" class="form-control" required>
                                             <option value="" hidden>--Pilih--</option>
                                             <!-- panggil data Sumber -->
                                             <?php foreach ($daftar_rekening as $key => $rekening) { ?>
@@ -60,6 +67,22 @@
                                     </div>
                                     <div class="mb-3 col-1 mt-5">
                                         <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="<?= base_url('pengajuan/laporan/preview') ?>" method="post">
+                                <div class="row">
+                                    <div class="mb-3 col-2">
+                                        <label for="tgl_awal">
+                                            <h6>Tanggal Laporan</h6>
+                                        </label>
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3 col-2 mt-2">
+                                        <label for="keterangan">
+                                            <h6> </h6>
+                                        </label><br>
+                                        <button type="submit" class="btn btn-warning btn-sm"><strong>Cari</strong></button>
                                     </div>
                                 </div>
                             </form>
@@ -197,6 +220,13 @@
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
+    // Fungsi untuk membuat combobox searchable
+    $(document).ready(function() {
+        $("#id_select").select2({
+            placeholder: "-- Pilih --",
+            allowClear: true,
+        });
+    });
     $(document).ready(function() {
         var table = $('#table').DataTable({
             buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],

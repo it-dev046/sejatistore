@@ -11,7 +11,7 @@ class PengajuanController extends BaseController
         $data = [
             'title' => 'Halaman Pengajuan Dana',
             'userId' => $this->session->get('id'),
-            'daftar_pengajuan' => $this->PengajuanModel->orderBy('id_pengajuan', 'DESC')
+            'daftar_pengajuan' => $this->PengajuanModel->orderBy('tanggal', 'DESC')
                 ->join('rekening', 'rekening.id_rekening = pengajuan.id_rekening', 'left')->findAll(),
             'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
         ];
@@ -75,6 +75,30 @@ class PengajuanController extends BaseController
             return redirect()->back()->with('success', 'Pengajuan Dana Berhasil Dihapus');
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
+        }
+    }
+
+    public function laporan()
+    {
+        $tanggal = $this->request->getPost('tanggal');
+        $cek = $this->PengajuanModel->cek($tanggal);
+
+        if (!empty($cek)) {
+            $jumlahnilai = $this->PengajuanModel->jumlahnilai($tanggal);
+
+            $data = [
+                'title' => 'Laporan Pengajuan Dana',
+                'tanggal' => $tanggal,
+                'daftar_pengajuan' => $this->PengajuanModel->orderBy('id_pengajuan', 'DESC')
+                    ->join('rekening', 'rekening.id_rekening = pengajuan.id_rekening', 'left')
+                    ->where('DATE(tanggal) =', $tanggal)
+                    ->findAll(),
+                'jumlahtotal' => $jumlahnilai,
+            ];
+            // var_dump($data);
+            return view('admin/pengajuan/laporan', $data);
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada Pengajuan pada tanggal tersebut');
         }
     }
 }

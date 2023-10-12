@@ -8,7 +8,7 @@ class MemoController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'Halaman Memo Perusahaan',
+            'title' => 'Halaman Memo',
             'userId' => $this->session->get('id'),
             'daftar_memo' => $this->MemoModel->orderBy('id_memo', 'DESC')->findAll(),
         ];

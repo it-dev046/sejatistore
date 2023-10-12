@@ -69,10 +69,10 @@
                                             </td>
                                             <td>
                                                 <?php
-                                                $no = 1;
+                                                $no2 = 1;
                                                 foreach ($daftar_uraian as $key => $value) {
                                                     if ($value->id_order == $order->id_order) { ?>
-                                                        <?= $no++; ?> . <?= $value->nama ?> ( <?= $value->jumlah ?> ) <br>
+                                                        <?= $no2++; ?> . <?= $value->nama ?> ( <?= $value->jumlah ?> ) <br>
                                                     <?php } ?>
                                                 <?php } ?>
                                             </td>

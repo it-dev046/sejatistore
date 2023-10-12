@@ -9,5 +9,5 @@ class BulananModel extends Model
     protected $table            = 'bulanan';
     protected $primaryKey       = 'id_bulanan';
     protected $returnType       = 'object';
-    protected $allowedFields    = ['id_rekening', 'nomor', 'tempo', 'keterangan'];
+    protected $allowedFields    = ['nama', 'nomor', 'tempo', 'keterangan'];
 }

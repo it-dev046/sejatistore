@@ -12,7 +12,7 @@ class OrderController extends BaseController
             'title' => 'Halaman Order Barang',
             'userId' => $this->session->get('id'),
             'level' => $this->session->get('level'),
-            'daftar_order' => $this->OrderModel->orderBy('id_order', 'DESC')->findAll(),
+            'daftar_order' => $this->OrderModel->orderBy('tanggal', 'DESC')->findAll(),
             'daftar_uraian' => $this->DetailorderModel->orderBy('id_order', 'DESC')->findAll(),
         ];
 
@@ -136,13 +136,13 @@ class OrderController extends BaseController
         // Hapus data
         $order = $this->OrderModel->where('id_order', $id_order)->first();
         $bukti = $order->bukti;
-        if ($bukti == "") {
+        if ($bukti == "Belum") {
         } else {
             unlink('foto/order/' . $bukti);
         }
 
         $nota = $order->nota;
-        if ($nota == "") {
+        if ($nota == "Belum") {
         } else {
             unlink('foto/order/' . $nota);
         }

@@ -14,7 +14,11 @@ class HutangController extends BaseController
             'daftar_hutang' => $this->HutangModel->orderBy('id_hutang', 'DESC')
                 ->join('rekening', 'rekening.id_rekening = hutang.id_rekening', 'left')
                 ->findAll(),
-            'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')->findAll(),
+            'daftar_rekening' => $this->RekeningModel
+                ->orderBy('usaha', 'ASC')
+                ->distinct()
+                ->select('usaha')
+                ->findAll(),
         ];
 
         return view('admin/hutang/index', $data);
@@ -24,13 +28,17 @@ class HutangController extends BaseController
     {
         $cekid = $this->session->get('id');
         $userId = $this->request->getPost('userId');
-
         if ($userId == $cekid) {
+            $usaha = $this->request->getPost('usaha');
+            $rekening = $this->RekeningModel
+                ->orderBy('usaha', 'ASC')
+                ->where('usaha =', $usaha)
+                ->first();
 
             //simpan data database
             $data = [
                 'tanggal' => esc($this->request->getPost('tanggal')),
-                'id_rekening' => esc($this->request->getPost('id_rekening')),
+                'id_rekening' => $rekening->id_rekening,
                 'alamat' => esc($this->request->getPost('alamat')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'total' => esc($this->request->getPost('total')),
@@ -50,8 +58,13 @@ class HutangController extends BaseController
 
         if ($userId == $cekid) {
             //simpan data database
+            $usaha = $this->request->getPost('usaha');
+            $rekening = $this->RekeningModel
+                ->orderBy('usaha', 'ASC')
+                ->where('usaha =', $usaha)
+                ->first();
             $data = [
-                'id_rekening' => esc($this->request->getPost('id_rekening')),
+                'id_rekening' => $rekening->id_rekening,
                 'alamat' => esc($this->request->getPost('alamat')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'total' => esc($this->request->getPost('total')),
@@ -83,7 +96,11 @@ class HutangController extends BaseController
 
     public function uraian($id_hutang)
     {
-        $hutang = $this->HutangModel->where('id_hutang', $id_hutang)->first();
+        $hutang = $this->HutangModel
+            ->join('rekening', 'rekening.id_rekening = hutang.id_rekening', 'left')
+            ->where('id_hutang', $id_hutang)
+            ->first();
+
         $totalbayar = $this->DetailHutangModel->totalbayar($id_hutang);
         $sisa = $hutang->total - $totalbayar;
 
@@ -97,6 +114,15 @@ class HutangController extends BaseController
                 ->where('id_hutang', $hutang->id_hutang)
                 ->orderBy('tanggal', 'DESC')
                 ->findAll(),
+            'daftar_rekening' => $this->RekeningModel
+                ->where('usaha =', $hutang->usaha)
+                ->findAll(),
+            'daftar_kas' => $this->KasModel->orderBy('tanggal', 'DESC')
+                ->join('katekas', 'katekas.id_katekas = kas.id_katekas', 'left')
+                ->join('sumber_kas', 'sumber_kas.id_sumber = kas.id_sumber', 'left')
+                ->select('kas.*, katekas.kode as katekas, sumber_kas.kode as sumber')
+                ->where('katekas.kode =', 'PUT')
+                ->findAll(),
             'totalbayar' => $totalbayar,
             'sisa' => $sisa,
         ];
@@ -108,12 +134,19 @@ class HutangController extends BaseController
     public function uraiansimpan()
     {
         //simpan data database
+        $id_kas = $this->request->getPost('id_kas');
+        $kas = $this->KasModel->orderBy('tanggal', 'ASC')
+            ->join('katekas', 'katekas.id_katekas = kas.id_katekas', 'left')
+            ->join('sumber_kas', 'sumber_kas.id_sumber = kas.id_sumber', 'left')
+            ->select('kas.*, katekas.kode as katekas, sumber_kas.kode as sumber')
+            ->where('kas.id_kas', $id_kas)
+            ->first();
         $tanggal = $this->request->getPost('tanggal');
         $id_hutang = $this->request->getPost('id_hutang');
-        $keterangan = $this->request->getPost('keterangan');
-        $sumber = $this->request->getPost('sumber');
+        $sumber = $kas['sumber'];
+        $keterangan = $kas['uraian'];
         $tujuan = $this->request->getPost('tujuan');
-        $bayar = $this->request->getPost('bayar');
+        $bayar = $kas['kredit'];
 
         $data = [
             'tanggal' => $tanggal,

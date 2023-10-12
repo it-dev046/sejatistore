@@ -143,7 +143,7 @@ $page = $this->PageModel->findAll();
               </a>
               <div class="collapse" id="collapseLayouts9" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                 <nav class="sb-sidenav-menu-nested nav">
-                  <a class="nav-link" href="<?= base_url('rpt') ?>">Recana Pembayaran</a>
+                  <a class="nav-link" href="<?= base_url('rpt') ?>">Rencana Bayaran</a>
                   <a class="nav-link" href="<?= base_url('gatuk') ?>">Gaji Pekerja</a>
                 </nav>
               </div>
@@ -159,13 +159,13 @@ $page = $this->PageModel->findAll();
               <div class="collapse" id="collapseLayouts10" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                 <nav class="sb-sidenav-menu-nested nav">
                   <a class="nav-link" href="<?= base_url('kasbon') ?>">Kasbon</a>
-                  <a class="nav-link" href="<?= base_url('deposit') ?>">Deposit Costumer</a>
+                  <a class="nav-link" href="<?= base_url('deposit') ?>">Deposit</a>
                   <a class="nav-link" href="<?= base_url('piutang') ?>">Piutang</a>
                   <a class="nav-link" href="<?= base_url('rekening') ?>">Rekening</a>
                   <a class="nav-link" href="<?= base_url('hutang') ?>">Hutang</a>
                   <a class="nav-link" href="<?= base_url('bulanan') ?>">Pemakaian</a>
                   <a class="nav-link" href="<?= base_url('memo') ?>">Memo</a>
-                  <a class="nav-link" href="<?= base_url('pengajuan') ?>">Pengajuan Dana</a>
+                  <a class="nav-link" href="<?= base_url('pengajuan') ?>">Pengajuan</a>
                 </nav>
               </div>
             <?php } elseif ($level == "3") { ?>

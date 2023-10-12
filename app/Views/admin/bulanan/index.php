@@ -13,7 +13,7 @@
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
-                            Daftar Bulanan Perusahaan
+                            Daftar Absensi Karyawan
                         </div>
                         <div class="card-body">
 
@@ -24,19 +24,116 @@
                                 </div>
                             <?php endif; ?>
 
+                            <!-- Notifikasi Berhasil -->
+                            <?php if (session('error')) : ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session('error'); ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <form action="<?= base_url('bulanan/uraian/tambah') ?>" method="post">
+                                <?= csrf_field() ?>
+                                <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
+                                <div class="row">
+                                    <div class="mb-3 col-2">
+                                        <label for="nilai">
+                                            <h6>Tanggal</h6>
+                                        </label>
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3 col-3">
+                                        <label for="nilai">
+                                            <h6>Daftar Pemakaian</h6>
+                                        </label>
+                                        <select name="id_bulanan" id="id_select" class="form-control" required>
+                                            <option value="" hidden>--Pilih--</option>
+                                            <!-- panggil data Sumber -->
+                                            <?php foreach ($daftar_bulanan as $key => $bulanan) { ?>
+                                                <option value="<?= $bulanan->id_bulanan ?>"><?= $bulanan->nama ?> (<?= $bulanan->nomor ?>)</option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3 col-2">
+                                        <label for="bayar">
+                                            <h6>Pembayaran</h6>
+                                        </label>
+                                        <input type="number" name="bayar" id="bayar" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3 col-3">
+                                        <label for="keterangan">
+                                            <h6>Keterangan</h6>
+                                        </label>
+                                        <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="3" required></textarea>
+                                    </div>
+                                    <div class="mb-3 col-1 mt-4">
+                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="<?= base_url('bulanan/laporan/preview') ?>" method="post">
+                                <div class="row">
+                                    <div class="mb-3 col-2">
+                                        <label for="tgl_awal">
+                                            <h6>Tanggal Laporan</h6>
+                                        </label>
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3 col-2 mt-2">
+                                        <label for="keterangan">
+                                            <h6> </h6>
+                                        </label><br>
+                                        <button type="submit" class="btn btn-warning btn-sm"><strong>Cari</strong></button>
+                                    </div>
+                                </div>
+                            </form>
+                            <hr>
+                            <table id="table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tanggal</th>
+                                        <th>Pemakaian</th>
+                                        <th>Pembayaran</th>
+                                        <th>Keterangan</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $no = 1; ?>
+                                    <?php foreach ($daftar_uraian as $value) : ?>
+                                        <!-- html... -->
+                                        <tr>
+                                            <td> <?= $no++; ?> </td>
+                                            <td> <?= date('d F Y', strtotime($value['tanggal'])) ?></td>
+                                            <td> <?= $value['nama']; ?> (<?= $value['nomor'] ?>) </td>
+                                            <td>
+                                                <?= number_to_currency($value['bayar'], 'IDR', 'id_ID',) ?>
+                                            </td>
+                                            <td> <?= $value['keterangan'] ?> </td>
+                                            <td class="text-canter">
+                                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapus2Modal<?= $value['id']; ?>">
+                                                    <i class="fas fa-trash-alt"></i> Hapus
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Daftar Pemakian Bulanan
+                        </div>
+                        <div class="card-body">
                             <form action="<?= base_url('bulanan/tambah') ?>" method="post">
                                 <?= csrf_field() ?>
                                 <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
                                 <div class="row">
-                                    <div class="mb-3 col-1">
-                                        <label for="tempo">
-                                            <h6>Per Tgl</h6>
-                                        </label>
-                                        <input type="number" name="tempo" id="tempo" max="31" class="form-control" required>
-                                    </div>
                                     <div class="mb-3 col-2">
                                         <label for="nama">
-                                            <h6>Nama </h6>
+                                            <h6>Nama Pemakian </h6>
                                         </label>
                                         <input type="text" name="nama" id="nama" class="form-control" required>
                                     </div>
@@ -63,7 +160,6 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Per Tanggal</th>
                                         <th>Nama Pembayaran</th>
                                         <th>No Pembayaran</th>
                                         <th>Keterangan</th>
@@ -76,14 +172,10 @@
                                         <!-- html... -->
                                         <tr>
                                             <td> <?= $no++; ?> </td>
-                                            <td> <?= $value->tempo; ?> </td>
                                             <td> <?= $value->nama; ?> </td>
                                             <td> <?= $value->nomor; ?> </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
-                                                <a href="<?= base_url('bulanan/uraian/' . $value->id_bulanan) ?>" class="btn btn-secondary btn-sm">
-                                                    <i class="fas fa-list"></i>
-                                                </a>
                                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $value->id_bulanan; ?>">
                                                     <i class="fas fa-edit"></i>
                                                 </button>
@@ -115,13 +207,6 @@
                             <?= csrf_field() ?>
                             <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
                             <input type="hidden" name="_method" value="PUT">
-
-                            <div class="mb-3">
-                                <label for="tempo">
-                                    <h6>Per Tgl</h6>
-                                </label>
-                                <input type="number" name="tempo" id="tempo" max="31" class="form-control" value="<?= $bulanan->tempo; ?>" required>
-                            </div>
                             <div class=" mb-3">
                                 <label for="nama">
                                     <h6>Nama Pembayaran</h6>
@@ -193,6 +278,56 @@
     </div>
     </div>
 <?php endforeach; ?>
+
+
+<?php foreach ($daftar_uraian as $key => $value) { ?>
+    <div class="modal fade" id="hapus2Modal<?= $value['id'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i> Hapus Pembayaran Bulanan Perusahaan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action=" <?= base_url('bulanan/uraian/hapus/' . $value['id']) ?>" method="post">
+                        <?= csrf_field() ?>
+                        <input type="number" name="id_bulanan" id="id_bulanan" class="form-control" value="<?= $bulanan->id_bulanan ?>" hidden>
+                        <input type="hidden" name="_method" value="DELETE">
+                        <p>
+                        <table class="table table-borderless table-sm">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" scope="row">Yakin Pembayaran Bulanan Perusahaan</td>
+                                </tr>
+                                <tr>
+                                    <td scope="row" width="100px">Tanggal</td>
+                                    <td> : <strong><?= date('d M Y', strtotime($value['tanggal'])); ?></strong></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row" width="100px">uraian</td>
+                                    <td> : <strong><?= $value['keterangan']; ?></strong></td>
+                                </tr>
+                                <tr>
+                                    <td scope="row" width="100px">Pembayaran</td>
+                                    <?php if (!empty($value['bayar'])) { ?>
+                                        <td> : <strong> <?= number_to_currency($value['bayar'], 'IDR', 'id_ID',) ?></strong></td>
+                                    <?php } else { ?>
+                                        <td> : <strong> 0 </strong></td>
+                                    <?php } ?>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php } ?>
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
 <script type="text/javascript">
