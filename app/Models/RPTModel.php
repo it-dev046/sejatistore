@@ -10,4 +10,10 @@ class RPTModel extends Model
     protected $primaryKey       = 'id_rpt';
     protected $returnType       = 'object';
     protected $allowedFields    = ['tanggal', 'invoice', 'nama', 'alamat', 'tukang', 'sisa_hbk', 'bayar', 'keterangan'];
+
+
+    public function cek($tanggal)
+    {
+        return $this->where('tanggal =', $tanggal)->countAllResults() > 0;
+    }
 }

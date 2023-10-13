@@ -33,11 +33,11 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Tanggal</th>
-                                        <th>Pemesan</th>
-                                        <th>Penerima</th>
                                         <th>Pekerjaan</th>
-                                        <th>Status</th>
                                         <th>Orderan</th>
+                                        <th>Rekening</th>
+                                        <th>Pembayaran</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -48,9 +48,28 @@
                                         <tr>
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($order->tanggal)); ?></td>
-                                            <td> <?= $order->pemesan; ?> </td>
-                                            <td> <?= $order->penerima; ?> </td>
                                             <td> <?= $order->kerja; ?> <br> ( <?= $order->keterangan; ?> ) </td>
+                                            <td>
+                                                <?php
+                                                $no2 = 1;
+                                                foreach ($daftar_uraian as $key => $value) {
+                                                    if ($value->id_order == $order->id_order) { ?>
+                                                        <?= $no2++; ?> . <?= $value->nama ?> ( <?= $value->jumlah ?> ) <br>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <?= $order->rek1; ?> <br>
+                                                <?= $order->rek2; ?> <br>
+                                                <?= $order->rek3; ?> <br>
+                                            </td>
+                                            <td>
+                                                <?php if (!empty($order->bayar)) { ?>
+                                                    <?= number_to_currency($order->bayar, 'IDR', 'id_ID',) ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                            </td>
                                             <td>
                                                 <?php if ($order->bukti <> "Belum") { ?>
                                                     <a href="<?= base_url('order/nota/gambar/' . $order->id_order) ?>" class="btn btn-warning btn-sm">
@@ -65,15 +84,6 @@
                                                     </a>
                                                 <?php } else { ?>
                                                     <?= $order->status; ?>
-                                                <?php } ?>
-                                            </td>
-                                            <td>
-                                                <?php
-                                                $no2 = 1;
-                                                foreach ($daftar_uraian as $key => $value) {
-                                                    if ($value->id_order == $order->id_order) { ?>
-                                                        <?= $no2++; ?> . <?= $value->nama ?> ( <?= $value->jumlah ?> ) <br>
-                                                    <?php } ?>
                                                 <?php } ?>
                                             </td>
                                             <td class="text-canter">

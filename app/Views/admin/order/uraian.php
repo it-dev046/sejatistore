@@ -236,6 +236,10 @@
                             <label for="nota">Upload Nota</label>
                             <input type="file" name="nota" id="nota" class="form-control" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="bayar">Pembayaran</label>
+                            <input type="number" name="bayar" id="bayar" class="form-control" required>
+                        </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>

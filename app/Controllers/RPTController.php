@@ -11,7 +11,7 @@ class RPTController extends BaseController
         $data = [
             'title' => 'Rancangan Pembayaran',
             'userId' => $this->session->get('id'),
-            'daftar_rpt' => $this->RPTModel->orderBy('tanggal', 'DESC')->findAll(),
+            'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
             'daftar_hbk' => $this->HbkModel->orderBy('id_hbk', 'DESC')
                 ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'left')
                 ->where('sisa_hbk >', 0)
@@ -81,6 +81,27 @@ class RPTController extends BaseController
             return redirect()->back()->with('success', 'Rancangan Pembayaran Berhasil Dihapus');
         } else {
             return redirect()->back()->with('error', 'Maaf Server sedang sibuk silakhan input ulang');
+        }
+    }
+
+
+    public function laporan()
+    {
+        $tanggal = $this->request->getPost('tanggal');
+        $cek = $this->RPTModel->cek($tanggal);
+
+        if (!empty($cek)) {
+            $data = [
+                'title' => 'Laporan Rancangan Pembayaran',
+                'tanggal' => $tanggal,
+                'daftar_rpt' => $this->RPTModel->orderBy('tukang', 'ASC')
+                    ->where('DATE(tanggal) =', $tanggal)
+                    ->findAll(),
+            ];
+            // var_dump($data);
+            return view('admin/rpt/laporan', $data);
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada Rancangan Pembayaran pada tanggal tersebut');
         }
     }
 }

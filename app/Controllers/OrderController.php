@@ -12,7 +12,10 @@ class OrderController extends BaseController
             'title' => 'Halaman Order Barang',
             'userId' => $this->session->get('id'),
             'level' => $this->session->get('level'),
-            'daftar_order' => $this->OrderModel->orderBy('tanggal', 'DESC')->findAll(),
+            'daftar_order' => $this->OrderModel
+                ->join('toko', 'toko.id_toko = order.id_toko', 'left')
+                ->orderBy('id_order', 'DESC')
+                ->findAll(),
             'daftar_uraian' => $this->DetailorderModel->orderBy('id_order', 'DESC')->findAll(),
         ];
 
@@ -31,6 +34,7 @@ class OrderController extends BaseController
             'kerja' => esc($this->request->getPost('kerja')),
             'keterangan' => esc($this->request->getPost('keterangan')),
             'tanggal_acc' => $tanggal,
+            'bayar' => 0,
             'status' => 'Belum',
             'nota' => 'Belum',
             'bukti' => 'Belum',
@@ -48,6 +52,7 @@ class OrderController extends BaseController
             'penerima' => esc($this->request->getPost('penerima')),
             'kerja' => esc($this->request->getPost('kerja')),
             'keterangan' => esc($this->request->getPost('keterangan')),
+            'bayar' => esc($this->request->getPost('bayar')),
         ];
         $this->OrderModel->update($id_order, $data);
 
@@ -82,6 +87,7 @@ class OrderController extends BaseController
             //simpan data ke database
             $data = [
                 'id_toko' => esc($this->request->getPost('id_toko')),
+                'bayar' => esc($this->request->getPost('bayar')),
                 'nota' => $nama_file,
                 'status' => $status,
             ];

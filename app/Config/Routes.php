@@ -450,6 +450,7 @@ if ($level == "1") {
     $routes->post('rpt/tambah', 'RPTController::store', ['filter' => 'isLoggedIn']);
     $routes->put('rpt/ubah/(:num)', 'RPTController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('rpt/hapus/(:num)', 'RPTController::destroy/$1', ['filter' => 'isLoggedIn']);
+    $routes->post('rpt/laporan/preview', 'RPTController::laporan', ['filter' => 'isLoggedIn']);
 
     $routes->get('gatuk', 'GatukController::index', ['filter' => 'isLoggedIn']);
     $routes->post('gatuk/tambah', 'GatukController::store', ['filter' => 'isLoggedIn']);

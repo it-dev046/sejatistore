@@ -694,7 +694,7 @@ class CetakController extends BaseController
         $data = [
             'title' => 'Order Barang ASN',
             'tanggal' => date('d F Y'),
-            'daftar_order' => $this->OrderModel->orderBy('tanggal', 'DESC')->findAll(),
+            'daftar_order' => $this->OrderModel->orderBy('id_order', 'DESC')->findAll(),
             'daftar_uraian' => $this->DetailorderModel->orderBy('id_order', 'DESC')->findAll(),
         ];
 

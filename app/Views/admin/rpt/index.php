@@ -24,6 +24,15 @@
                                 </div>
                             <?php endif; ?>
 
+
+                            <!-- Notifikasi Berhasil -->
+                            <?php if (session('error')) : ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session('error'); ?>
+                                </div>
+                            <?php endif; ?>
+
+
                             <form action="<?= base_url('rpt/tambah') ?>" method="post">
                                 <?= csrf_field() ?>
                                 <input type="text" name="userId" id="userId" class="form-control" value="<?= $userId; ?>" hidden>
@@ -34,7 +43,7 @@
                                         </label>
                                         <input type="date" name="tanggal" id="tanggal" class="form-control" required>
                                     </div>
-                                    <div class="mb-3 col-7">
+                                    <div class="mb-3 col-6">
                                         <label for="nilai">
                                             <h6>Pilih Invoice</h6>
                                         </label>
@@ -53,8 +62,26 @@
                                         </label>
                                         <textarea name="keterangan" id="keterangan" class="form-control" cols="30" rows="3" required></textarea>
                                     </div>
+                                    <div class="mb-3 col-1 mt-5">
+                                        <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
+                            </form>
+                            <form action="<?= base_url('rpt/laporan/preview') ?>" method="post">
+                                <div class="row">
+                                    <div class="mb-3 col-2">
+                                        <label for="tgl_awal">
+                                            <h6>Tanggal Laporan</h6>
+                                        </label>
+                                        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3 col-2 mt-2">
+                                        <label for="keterangan">
+                                            <h6> </h6>
+                                        </label><br>
+                                        <button type="submit" class="btn btn-warning btn-sm"><strong>Cari</strong></button>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
 
