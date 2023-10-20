@@ -67,4 +67,22 @@ class PembayaranModel extends Model
             ->countAllResults();
         return $query;
     }
+
+    public function totalpembayaran()
+    {
+        $today = date('Y-m-d');
+        $query = $this->db->table('pembayaran')
+            ->join('transaksi', 'transaksi.id_trans = pembayaran.id_trans', 'left')
+            ->where('DATE(tanggal_input)', $today)
+            ->selectSum('pembayaran.total')
+            ->get();
+
+        $result = $query->getRow();
+
+        if ($result) {
+            return $result->total;
+        } else {
+            return 0;
+        }
+    }
 }

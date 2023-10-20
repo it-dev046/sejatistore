@@ -119,7 +119,7 @@
                                         <th>Invoice</th>
                                         <th>Pekerjaan</th>
                                         <th>Penerima</th>
-                                        <th>Pembayaran</th>
+                                        <th>Nominal</th>
                                         <th>Sisa</th>
                                         <th>Keterangan</th>
                                         <th>Aksi</th>
@@ -141,11 +141,20 @@
                                             </td>
                                             <td> <?= $value->usaha; ?> <br> <?= $value->AN; ?> <br> <?= $value->rek; ?> <br> ( <?= $value->bank; ?> ) </td>
                                             <td>
+                                                Bayar :
                                                 <?php if (!empty($bayar)) { ?>
                                                     <?= number_to_currency($bayar, 'IDR', 'id_ID') ?>
                                                 <?php } else { ?>
                                                     0
                                                 <?php } ?>
+                                                <br>
+                                                Potongan :
+                                                <?php if (!empty($value->potongan)) { ?>
+                                                    <?= number_to_currency($value->potongan, 'IDR', 'id_ID') ?>
+                                                <?php } else { ?>
+                                                    0
+                                                <?php } ?>
+                                                <br>
                                             </td>
                                             <td>
                                                 <?php if (!empty($value->sisa_hbk)) { ?>

@@ -28,7 +28,7 @@
                                 </div>
                             <?php endif; ?>
 
-                            <table id="datatablesSimple">
+                            <table id="table" class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -48,7 +48,7 @@
                                         <tr>
                                             <td> <?= $no++; ?> </td>
                                             <td> <?= date('d M Y', strtotime($order->tanggal)); ?></td>
-                                            <td> <?= $order->kerja; ?> <br> ( <?= $order->keterangan; ?> ) </td>
+                                            <td> <?= $order->kerja; ?> </td>
                                             <td>
                                                 <?php
                                                 $no2 = 1;
@@ -236,4 +236,21 @@
 
 <?= $this->endSection() ?>
 <?= $this->Section('script') ?>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#table').DataTable({
+            buttons: ['copy', 'csv', 'print', 'excel', 'pdf', 'colvis'],
+            dom: "<'row'<'col-md-3'l><'col-md-5'B><'col-md-4'f>>" +
+                "<'row'<'col-md-12'tr>>" +
+                "<'row'<'col-md-5'i><'col-md-7'p>>",
+            lengthMenu: [
+                [5, 10, 25, 50, 100, -1],
+                [5, 10, 25, 50, 100, "All"]
+            ]
+        });
+
+        table.buttons().container()
+            .appendTo('#table_wrapper .col-md-5:eq(0)');
+    });
+</script>
 <?= $this->endSection() ?>

@@ -435,6 +435,7 @@ if ($level == "1") {
     $routes->post('ins/tambah', 'InsController::store', ['filter' => 'isLoggedIn']);
     $routes->put('ins/ubah/(:num)', 'InsController::update/$1', ['filter' => 'isLoggedIn']);
     $routes->delete('ins/hapus/(:num)', 'InsController::destroy/$1', ['filter' => 'isLoggedIn']);
+    $routes->get('ins/cetak/(:num)', 'CetakController::ins/$1', ['filter' => 'isLoggedIn']);
 
     $routes->get('gaji', 'GajiController::index', ['filter' => 'isLoggedIn']);
     $routes->post('gaji/tambah', 'GajiController::store', ['filter' => 'isLoggedIn']);

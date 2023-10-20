@@ -71,8 +71,10 @@ class DetailBayarModel extends Model
     {
         $today = date('Y-m-d');
         $query = $this->db->table('detail_pembayaran')
+            ->join('pembayaran', 'pembayaran.id_bayar = detail_pembayaran.id_bayar', 'right')
+            ->join('transaksi', 'transaksi.id_trans = pembayaran.id_trans', 'right')
             ->where('DATE(tanggal)', $today)
-            ->selectSum('total')
+            ->selectSum('pembayaran.total')
             ->get();
 
         $result = $query->getRow();

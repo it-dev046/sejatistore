@@ -13,7 +13,7 @@ class InsController extends BaseController
                 ->join('karyawan', 'karyawan.id_karyawan = insentif.id_karyawan', 'left')
                 ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
                 ->select('insentif.*, karyawan.op, karyawan.um, karyawan.nama, rekening.rek, rekening.bank, rekening.AN')
-                ->orderBy('tanggal', 'DESC')
+                ->orderBy('id_ins', 'DESC')
                 ->findAll(),
             'daftar_karyawan' => $this->KaryawanModel->orderBy('nama', 'ASC')
                 ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
@@ -50,8 +50,9 @@ class InsController extends BaseController
 
             $tglakhir = $this->request->getPost('tanggal');
             // Menghitung tanggal 6 hari sebelumnya
+            $nama = $karyawan->nama;
             $tglawal = date('Y-m-d', strtotime('-6 days', strtotime($tglakhir)));
-            $mingguan = $this->AbsenModel->mingguan($tglawal, $tglakhir);
+            $mingguan = $this->AbsenModel->mingguan($tglawal, $tglakhir, $nama);
             $karyawan = $this->KaryawanModel->where('id_karyawan', $id_karyawan)->first();
 
             $allpotongan = $potongan + $mingguan;
@@ -62,7 +63,8 @@ class InsController extends BaseController
                 'tanggal' => esc($this->request->getPost('tanggal')),
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'id_karyawan' => $id_karyawan,
-                'potongan' => $allpotongan,
+                'potongan' => $potongan,
+                'absen' => $mingguan,
                 'total' => $total,
             ];
             $this->InsModel->insert($data);

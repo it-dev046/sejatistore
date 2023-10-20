@@ -13,9 +13,7 @@ class GatukController extends BaseController
             'userId' => $this->session->get('id'),
             'daftar_gatuk' => $this->GatukModel
                 ->join('rekening', 'rekening.id_rekening = gatuk.id_rekening', 'left')
-                ->join('rpt', 'rpt.invoice = gatuk.invoice', 'left')
-                ->select('gatuk.*, rekening.*, rpt.nama, rpt.alamat')
-                ->orderBy('gatuk.tanggal', 'DESC')
+                ->orderBy('gatuk.id_gatuk', 'DESC')
                 ->findAll(),
             'daftar_rpt' => $this->RPTModel->orderBy('id_rpt', 'DESC')->findAll(),
             'daftar_rekening' => $this->RekeningModel->orderBy('usaha', 'ASC')
@@ -51,8 +49,7 @@ class GatukController extends BaseController
                 ];
                 $this->KasbonModel->update($kasbon->id_kasbon, $data);
             }
-            $bayar = $nilai - $potongan;
-            $sisa = $rpt->sisa_hbk - $bayar;
+            $sisa = $rpt->sisa_hbk - $nilai;
 
             //simpan data database
             $data = [
@@ -63,6 +60,8 @@ class GatukController extends BaseController
                 'keterangan' => esc($this->request->getPost('keterangan')),
                 'invoice' => $rpt->invoice,
                 'tukang' => $rpt->tukang,
+                'nama' => $rpt->nama,
+                'alamat' => $rpt->alamat,
                 'sisa_hbk' => $sisa,
             ];
             $this->GatukModel->insert($data);
@@ -124,8 +123,6 @@ class GatukController extends BaseController
                     ->findAll(),
                 'daftar_gatuk' => $this->GatukModel->orderBy('id_gatuk', 'DESC')
                     ->join('rekening', 'rekening.id_rekening = gatuk.id_rekening', 'left')
-                    ->join('rpt', 'rpt.invoice = gatuk.invoice', 'left')
-                    ->select('gatuk.*, rekening.*, rpt.nama, rpt.alamat')
                     ->where('DATE(gatuk.tanggal) =', $tanggal)
                     ->findAll(),
                 'jumlahtotal' => $jumlahtotal,

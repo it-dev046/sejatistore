@@ -388,9 +388,16 @@ class HbkController extends BaseController
     public function updatetotal($id_hbk)
     {
         //simpan data ke database 
+        $jumlahterbayar = $this->BayarhbkModel->jumlahbayar($id_hbk);
+        $total = $this->request->getPost('total_hbk');
+        if ($jumlahterbayar > 0) {
+            $sisa_hbk = $total - $jumlahterbayar;
+        } else {
+            $sisa_hbk = $total;
+        }
         $data2 = [
-            'total_hbk' => esc($this->request->getPost('total_hbk')),
-            'sisa_hbk' => esc($this->request->getPost('total_hbk')),
+            'total_hbk' => $total,
+            'sisa_hbk' => $sisa_hbk,
         ];
         $this->HbkModel->update($id_hbk, $data2);
 

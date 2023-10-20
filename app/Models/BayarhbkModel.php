@@ -57,7 +57,7 @@ class BayarhbkModel extends Model
 
         $query = $this->db->table('bayarhbk')
             ->selectSum('bayar')
-            ->where('DATE(tanggal_input)', $today)
+            ->where('DATE(tanggal_ubah)', $today)
             ->get();
 
         $result = $query->getRow();

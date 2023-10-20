@@ -29,20 +29,18 @@
                             <?php $no = 1;
                             foreach ($daftar_hbk as $key => $value) { ?>
                                 <!-- html... -->
-                                <?php if (!empty($value->pekerja)) { ?>
-                                    <tr>
-                                        <td> <?= $no++; ?> </td>
-                                        <td> <?= $value->invoice; ?> </td>
-                                        <td> <?= $value->pekerja; ?> </td>
-                                        <td> <?= $value->nama; ?> </td>
-                                        <?php if ($value->bayar == 0) { ?>
-                                            <td> <?= $value->bayar; ?> </td>
-                                        <?php } else { ?>
-                                            <td> <?= number_to_currency($value->bayar, 'IDR', 'id_ID',) ?> </td>
-                                        <?php } ?>
-                                        <td> <?= $value->keterangan; ?> </td>
-                                    </tr>
-                                <?php } ?>
+                                <tr>
+                                    <td> <?= $no++; ?> </td>
+                                    <td> <?= $value->invoice; ?> </td>
+                                    <td> <?= $value->tukang; ?> </td>
+                                    <td> <?= $value->nama; ?> </td>
+                                    <?php if ($value->bayar == 0) { ?>
+                                        <td> <?= $value->bayar; ?> </td>
+                                    <?php } else { ?>
+                                        <td> <?= number_to_currency($value->bayar, 'IDR', 'id_ID',) ?> </td>
+                                    <?php } ?>
+                                    <td> <?= $value->keterangan; ?> </td>
+                                </tr>
                             <?php } ?>
                         </tbody>
                         <tfoot>

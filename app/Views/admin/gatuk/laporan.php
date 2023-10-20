@@ -109,6 +109,7 @@ $this->GatukModel = new GatukModel();
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                         </tr>
                                     <?php endforeach;  ?>
                                     <tr>
@@ -126,6 +127,7 @@ $this->GatukModel = new GatukModel();
                                                 <?php } ?>
                                             </strong>
                                         </td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

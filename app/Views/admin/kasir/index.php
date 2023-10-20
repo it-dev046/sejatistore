@@ -97,7 +97,6 @@
                         <div class="mb-3">
                             <label for="slug_kategori">Kategori</label>
                             <select name="id_katepel" id="id_katepel" class="form-control">
-                                <option value="" hidden>--Pilih--</option>
                                 <!-- panggil data kategori -->
                                 <?php foreach ($katepel as $key => $value) { ?>
                                     <option value="<?= $value['id_katepel'] ?>"><?= $value['nama_katepel'] ?></option>

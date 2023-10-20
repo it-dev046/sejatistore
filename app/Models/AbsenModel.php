@@ -12,11 +12,12 @@ class AbsenModel extends Model
     protected $allowedFields    = ['tanggal', 'nama', 'status', 'potongan'];
 
 
-    public function mingguan($tglawal, $tglakhir)
+    public function mingguan($tglawal, $tglakhir, $nama)
     {
         $query = $this->db->table('absen')
             ->where('DATE(tanggal) >=', $tglawal)
             ->where('DATE(tanggal) <=', $tglakhir)
+            ->where('nama', $nama)
             ->selectSum('potongan')
             ->get();
 

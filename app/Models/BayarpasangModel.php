@@ -51,8 +51,9 @@ class BayarpasangModel extends Model
         $today = date('Y-m-d');
 
         $query = $this->db->table('bayarpasang')
+            ->join('pemasangan', 'pemasangan.id_pasang = bayarpasang.id_pasang', 'left')
             ->selectSum('bayar')
-            ->where('DATE(tanggal_input)', $today)
+            ->where('DATE(bayarpasang.tanggal)', $today)
             ->get();
 
         $result = $query->getRow();

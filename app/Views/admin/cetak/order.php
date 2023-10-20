@@ -37,6 +37,7 @@
                         <th>Pemesan</th>
                         <th>Penerima</th>
                         <th>Pekerjaan</th>
+                        <th>Toko</th>
                         <th>Status</th>
                         <th>Orderan</th>
                     </tr>
@@ -50,7 +51,8 @@
                             <td> <?= date('d M Y', strtotime($order->tanggal)); ?></td>
                             <td> <?= $order->pemesan; ?> </td>
                             <td> <?= $order->penerima; ?> </td>
-                            <td> <?= $order->kerja; ?> <br> ( <?= $order->keterangan; ?> ) </td>
+                            <td> <?= $order->kerja; ?> </td>
+                            <td> <?= $order->nama; ?> <br> <?= $order->keterangan; ?> </td>
                             <td>
                                 <?php if ($order->bukti <> "Belum") { ?>
                                     <a href="<?= base_url('order/nota/gambar/' . $order->id_order) ?>" class="btn btn-warning btn-sm">

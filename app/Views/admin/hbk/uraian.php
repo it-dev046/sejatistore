@@ -153,15 +153,9 @@
                                 </li>
                             </ol>
                         </div>
-                        <?php if (empty($cekbayar)) { ?>
-                            <button type="button" class="btn btn-info btn-block m-2" data-bs-toggle="modal" data-bs-target="#updateModal">
-                                <i class="fas fa-edit"></i> Refisi Total Pembulatan
-                            </button>
-                        <?php } else { ?>
-                            <button type="button" class="btn btn-danger btn-block m-2">
-                                <i class="fas fa-users"></i> Sudah Pembayaran HBK
-                            </button>
-                        <?php } ?>
+                        <button type="button" class="btn btn-info btn-block m-2" data-bs-toggle="modal" data-bs-target="#updateModal">
+                            <i class="fas fa-edit"></i> Refisi Total Pembulatan
+                        </button>
                     </div>
                 </div>
             </div>

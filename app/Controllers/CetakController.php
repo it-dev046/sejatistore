@@ -694,7 +694,10 @@ class CetakController extends BaseController
         $data = [
             'title' => 'Order Barang ASN',
             'tanggal' => date('d F Y'),
-            'daftar_order' => $this->OrderModel->orderBy('id_order', 'DESC')->findAll(),
+            'daftar_order' => $this->OrderModel
+                ->join('toko', 'toko.id_toko = order.id_toko', 'right')
+                ->orderBy('id_order', 'DESC')
+                ->findAll(),
             'daftar_uraian' => $this->DetailorderModel->orderBy('id_order', 'DESC')->findAll(),
         ];
 
@@ -922,6 +925,34 @@ class CetakController extends BaseController
         ];
 
         return view('admin/cetak/memo', $data);
+        // var_dump($data);
+    }
+
+    public function ins($id_ins)
+    {
+
+        date_default_timezone_set("Asia/Manila");
+        $ins = $this->InsModel
+            ->join('karyawan', 'karyawan.id_karyawan = insentif.id_karyawan', 'left')
+            ->where('id_ins', $id_ins)
+            ->first();
+
+        $terbilang = new Terbilang();
+        $terbilang_total = $terbilang->angkaTerbilang($ins->total);
+
+        $data = [
+            'title' => 'Insentif_' . $ins->nama,
+            'tanggal' => date('d F Y'),
+            'ins' => $this->InsModel
+                ->where('id_ins', $id_ins)
+                ->join('karyawan', 'karyawan.id_karyawan = insentif.id_karyawan', 'left')
+                ->join('rekening', 'rekening.id_rekening = karyawan.id_rekening', 'left')
+                ->select('insentif.*, karyawan.posisi, karyawan.op, karyawan.um, karyawan.nama, rekening.rek, rekening.bank, rekening.AN')
+                ->first(),
+            'terbilang_total' => $terbilang_total,
+        ];
+
+        return view('admin/cetak/ins', $data);
         // var_dump($data);
     }
 

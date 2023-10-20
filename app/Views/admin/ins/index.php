@@ -106,8 +106,10 @@
                                                 <?php } ?>
                                                 <br>
                                                 Potongan + Absensi : <br>
-                                                <?php if (!empty($value->potongan)) { ?>
-                                                    (<?= number_to_currency($value->potongan, 'IDR', 'id_ID', 2) ?>)
+                                                <?php
+                                                $allpotongan = $value->potongan + $value->absen;
+                                                if (!empty($allpotongan)) { ?>
+                                                    (<?= number_to_currency($allpotongan, 'IDR', 'id_ID', 2) ?>)
                                                 <?php } else { ?>
                                                     0
                                                 <?php } ?>
@@ -122,6 +124,9 @@
                                             <td> <?= $value->AN; ?> <br> <?= $value->rek; ?> <br> (<?= $value->bank; ?>) </td>
                                             <td> <?= $value->keterangan; ?> </td>
                                             <td class="text-canter">
+                                                <a href="<?= base_url('ins/cetak/' . $value->id_ins) ?>" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-print"></i>
+                                                </a>
                                                 <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapusModal<?= $value->id_ins; ?>">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>

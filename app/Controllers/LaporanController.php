@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-date_default_timezone_set("Asia/Manila");
-
 class LaporanController extends BaseController
 {
     public function masuk()
@@ -41,10 +39,10 @@ class LaporanController extends BaseController
         $data = [
             'title' => 'Laporan Pengeluaran Tgl ' . date('d M Y', strtotime($tanggal)),
             'daftar_hbk' => $this->BayarhbkModel
+                ->join('hbk', 'hbk.id_hbk = bayarhbk.id_hbk', 'left')
+                ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'left')
+                ->select('bayarhbk.keterangan, bayarhbk.bayar, pemasangan.biaya , pemasangan.nama , pemasangan.invoice, hbk.tukang')
                 ->where('DATE(bayarhbk.tanggal)', $tanggal)
-                ->join('hbk', 'hbk.id_hbk = bayarhbk.id_hbk', 'right')
-                ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'right')
-                ->select('bayarhbk.keterangan, bayarhbk.bayar, pemasangan.biaya , pemasangan.nama , pemasangan.invoice')
                 ->orderBy('id', 'DESC')
                 ->findAll(),
             'tanggal' => $tanggal,
@@ -97,7 +95,7 @@ class LaporanController extends BaseController
                 ->where('DATE(bayarhbk.tanggal) <=', $endDate)
                 ->join('hbk', 'hbk.id_hbk = bayarhbk.id_hbk', 'right')
                 ->join('pemasangan', 'pemasangan.id_pasang = hbk.id_pasang', 'right')
-                ->select('bayarhbk.tanggal, bayarhbk.keterangan, bayarhbk.bayar, pemasangan.biaya , pemasangan.nama , pemasangan.invoice, hbk.pekerja')
+                ->select('bayarhbk.tanggal, bayarhbk.keterangan, bayarhbk.bayar, pemasangan.biaya , pemasangan.nama , pemasangan.invoice, hbk.tukang')
                 ->orderBy('id', 'DESC')
                 ->findAll(),
             'tanggal' => $endDate,

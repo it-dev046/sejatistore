@@ -60,18 +60,18 @@ $this->BayarhbkModel = new BayarhbkModel();
                                         <td><?= $hbk->drafter; ?> </td>
                                         <td> <?= number_to_currency($hbk->total_hbk, 'IDR', 'id_ID', 2) ?> </td>
                                         <td>
-                                            <?php if (!empty($hbk->gambar)) { ?>
-                                                <a href="<?= base_url('hbk/gambar/' . $hbk->id_hbk) ?>" class="btn btn-warning btn-sm">
-                                                    <i class="fas fa-download"></i>
-                                                </a>
-                                            <?php } else { ?>
-                                            <?php } ?>
                                             <a href="<?= base_url('hbk/uraian/' . $hbk->id_hbk) ?>" class="btn btn-dark btn-sm">
                                                 <i class="fas fa-list"></i>
                                             </a>
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ubahModal<?= $hbk->id_hbk; ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
+                                            <?php if (!empty($hbk->gambar)) { ?>
+                                                <a href="<?= base_url('hbk/gambar/' . $hbk->id_hbk) ?>" class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                            <?php } else { ?>
+                                            <?php } ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -157,11 +157,6 @@ $this->BayarhbkModel = new BayarhbkModel();
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-edit"></i>
                             Ubah hbk
-                            <?php
-                            $cekbayar = $this->BayarhbkModel->cekbayar($hbk->id_hbk);
-                            if (!empty($cekbayar)) { ?>
-                                ( Sudah Pembayaran )
-                            <?php } ?>
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -189,34 +184,29 @@ $this->BayarhbkModel = new BayarhbkModel();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                            <?php
-                            if (empty($cekbayar)) { ?>
-                                <div class="mb-3">
-                                    <label for="tukang">Tim Lapangan</label>
-                                    <select name="tukang" id="tukang" class="form-control">
-                                        <option value="" hidden>--Pilih--</option>
-                                        <?php foreach ($daftar_tukang as $tukang) : ?>
-                                            <option value="<?= $tukang->nama; ?>" <?= $hbk->tukang == $tukang->nama ? 'selected' : null ?>> <?= $tukang->nama; ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="nama">Dafar Pemasangan</label>
-                                    <select name="id_pasang" id="id_pasang" class="form-control">
-                                        <?php foreach ($daftar_pasang as $pasang) : ?>
-                                            <option value="<?= $pasang->id_pasang; ?>" <?= $hbk->id_pasang == $pasang->id_pasang ? 'selected' : null ?>> <?= $pasang->nama; ?> - <?= $pasang->invoice; ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="total_hbk">Total HBK</label>
-                                    <input type="number" name="total_hbk" id="total_hbk" class="form-control" value="<?= $hbk->total_hbk; ?>" required>
-                                </div>
-                            <?php } else { ?>
-                                <input type="number" name="total_hbk" id="total_hbk" class="form-control" value="<?= $hbk->total_hbk; ?>" hidden>
-                                <input type="text" name="id_pasang" id="id_pasang" class="form-control" value="<?= $hbk->id_pasang; ?>" hidden>
-                                <input type="text" name="tukang" id="tukang" class="form-control" value="<?= $hbk->tukang; ?>" hidden>
-                            <?php } ?>
+                            <div class="mb-3">
+                                <label for="tukang">Tim Lapangan</label>
+                                <select name="tukang" id="tukang" class="form-control">
+                                    <option value="" hidden>--Pilih--</option>
+                                    <?php foreach ($daftar_tukang as $tukang) : ?>
+                                        <option value="<?= $tukang->nama; ?>" <?= $hbk->tukang == $tukang->nama ? 'selected' : null ?>> <?= $tukang->nama; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nama">Dafar Pemasangan</label>
+                                <select name="id_pasang" id="id_pasang" class="form-control">
+                                    <?php foreach ($daftar_pasang as $pasang) : ?>
+                                        <option value="<?= $pasang->id_pasang; ?>" <?= $hbk->id_pasang == $pasang->id_pasang ? 'selected' : null ?>> <?= $pasang->nama; ?> - <?= $pasang->invoice; ?> </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="total_hbk">Total HBK</label>
+                                <input type="number" name="total_hbk" id="total_hbk" class="form-control" value="<?= $hbk->total_hbk; ?>" required>
+                            </div>
+                            <input type="number" name="total_hbk" id="total_hbk" class="form-control" value="<?= $hbk->total_hbk; ?>" hidden>
+                            <input type="text" name="id_pasang" id="id_pasang" class="form-control" value="<?= $hbk->id_pasang; ?>" hidden>
                             <div class=" mb-3">
                                 <label for="gambar">Upload Gambar Kerja</label>
                                 <input type="file" name="gambar" id="gambar" class="form-control">

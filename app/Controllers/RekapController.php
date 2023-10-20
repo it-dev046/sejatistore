@@ -328,8 +328,16 @@ class RekapController extends BaseController
     public function updatetotal($id)
     {
         //simpan data ke database
+        $jumlahterbayar = $this->BayarpasangModel->jumlahbayar($id);
+        $total = $this->request->getPost('biaya');
+        if ($jumlahterbayar > 0) {
+            $sisa_hbk = $total - $jumlahterbayar;
+        } else {
+            $sisa_hbk = $total;
+        }
         $data = [
-            'biaya' => esc($this->request->getPost('biaya')),
+            'biaya' => $total,
+            'sisa' => $sisa_hbk,
         ];
         $this->PasangModel->update($id, $data);
 

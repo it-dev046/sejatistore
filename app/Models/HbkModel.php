@@ -9,7 +9,7 @@ class HbkModel extends Model
     protected $table            = 'hbk';
     protected $primaryKey       = 'id_hbk';
     protected $returnType       = 'object';
-    protected $allowedFields    = ['id_pasang', 'no_hbk', 'kerja', 'tukang', 'total_hbk', 'sisa_hbk', 'gambar', 'pengawas', 'drafter', 'keterangan'];
+    protected $allowedFields    = ['id_pasang', 'no_hbk', 'kerja', 'tukang', 'total_hbk', 'sisa_hbk', 'gambar', 'pengawas', 'pengawas', 'drafter', 'keterangan'];
 
     // Dates
     protected $useTimestamps = true;
